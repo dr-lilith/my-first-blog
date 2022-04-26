@@ -26,8 +26,13 @@ SECRET_KEY = 'django-insecure-olrb7pqopn@vr%xfucifj81kbnopo^fnapv_%-sll6_bq0%(k%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
+
 ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
 
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'post_list'
+LOGOUT_REDIRECT_URL = 'post_list'
 
 # Application definition
 
