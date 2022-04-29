@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login
 from django.views import generic
 from django.urls import reverse_lazy
+import jwt
 
 
 
@@ -55,3 +56,7 @@ def post_edit(request, pk):
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/post_edit.html', {'form': form})
+
+
+
+jwt.encode({'pretty':'printed'}, 'donttellanyone')
