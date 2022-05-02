@@ -1,10 +1,14 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
+import rest_framework.permissions as p
+from .serializers import UserSerializer
+from rest_framework.response import Response
+from rest_framework import status
 
 
 class CreateUserAPIView(APIView):
     # Allow any user (authenticated or not) to access this url
-    permission_classes = (AllowAny,)
+    permission_classes = (p.AllowAny,)
 
     def post(self, request):
         user = request.data

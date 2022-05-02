@@ -47,8 +47,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog',
     'users',
+    'rest_framework',
+    'rest_framework_simplejwt',
 
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -143,7 +146,13 @@ REST_FRAMEWORK = {
   'DEFAULT_AUTHENTICATION_CLASSES': (
     'rest_framework_simplejwt.authentication.JWTAuthentication',
   ),
+  'DEFAULT_PERMISSION_CLASSES': [
+            'rest_framework.permissions.IsAuthenticated',
+        ],
 }
+
+ # в REST_FRAMEWORK нужно 'rest_framework_jwt.authentication.JSONWebTokenAuthentication'б
+ #  если хочешь использовать simplejwt, то тогда добавь это в rest_framework_simplejwt)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
