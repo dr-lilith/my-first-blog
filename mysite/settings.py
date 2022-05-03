@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+import datetime
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -149,6 +151,15 @@ REST_FRAMEWORK = {
   'DEFAULT_PERMISSION_CLASSES': [
             'rest_framework.permissions.IsAuthenticated',
         ],
+}
+
+JWT_AUTH = {
+
+    'JWT_VERIFY': True,
+    'JWT_VERIFY_EXPIRATION': True,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=3000),
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+
 }
 
  # в REST_FRAMEWORK нужно 'rest_framework_jwt.authentication.JSONWebTokenAuthentication'б
