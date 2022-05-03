@@ -34,6 +34,7 @@ class UserManager(BaseUserManager):
 
         return self._create_user(email, password=password, **extra_fields)
 
+
 class User(AbstractBaseUser, PermissionsMixin):
     """
     An abstract base class implementing a fully featured User model with

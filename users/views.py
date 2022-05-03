@@ -6,7 +6,34 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from . models import User
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.signals import user_logged_in
 
+
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        Add custom claims
+        token['name'] = user.name
+        ...
+        return token
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
 
 class CreateUserAPIView(APIView):
@@ -30,12 +57,10 @@ def authenticate_user(request):
         user = User.objects.get(email=email, password=password)
         if user:
             try:
-                payload = jwt_payload_handler(user)
-                token = jwt.encode(payload, settings.SECRET_KEY)
-                user_details = {}
-                user_details['name'] = "%s %s" % (
-                    user.first_name, user.last_name)
-                user_details['token'] = token
+                tokens = get_tokens_for_user(user)
+                user_details = {'name': "%s %s" % (
+                    user.first_name, user.last_name), 'token': tokens["access"], 'refresh_token': tokens["refresh"]}
+                #TODO figure out purpose of below
                 user_logged_in.send(sender=user.__class__,
                                     request=request, user=user)
                 return Response(user_details, status=status.HTTP_200_OK)
@@ -44,7 +69,7 @@ def authenticate_user(request):
         else:
             res = {
                 'error': 'can not authenticate with the given credentials or the account has been deactivated'}
-            return Response(res, status=status.HTTP_403_FORBIDDEN)
+            return Response(res, status=status.HTTP_401_UNAUTHORIZED)
     except KeyError:
         res = {'error': 'please provide a email and a password'}
         return Response(res)

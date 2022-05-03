@@ -5,7 +5,7 @@ from .views import CreateUserAPIView
 from . import views
 
 urlpatterns = [
-    path('create/', CreateUserAPIView.as_view()),
-    path('obtain_token/', views.authenticate_user),
+    path('create', CreateUserAPIView.as_view()),
+    path('obtain_token', views.authenticate_user),
 
 ]
