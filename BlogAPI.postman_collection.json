@@ -6,15 +6,33 @@
 	},
 	"item": [
 		{
-			"name": "Obtain Token",
+			"name": "login",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"melnica@gmail.com\",\r\n    \"password\":\"111\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}users/login",
+					"host": [
+						"{{host}}users"
+					],
+					"path": [
+						"login"
+					]
+				}
 			},
 			"response": []
 		},
 		{
-			"name": "create",
+			"name": "register",
 			"request": {
 				"method": "GET",
 				"header": []
