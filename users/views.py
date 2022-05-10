@@ -22,13 +22,10 @@ def get_tokens_for_user(user):
 
 
 class CreateUserAPIView(APIView):
-    # Allow any user (authenticated or not) to access this url
     permission_classes = (p.AllowAny,)
 
-    #@api_view(['POST'])
     def post(self, request):
         user = request.data
-        #user = User(request.data)
         serializer = UserSerializer(data=user)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -65,13 +62,10 @@ def authenticate_user(request):
 
 
 class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
-    # Allow only authenticated users to access this url
     permission_classes = (IsAuthenticated,)
     serializer_class = UserSerializer
 
     def get(self, request, *args, **kwargs):
-        # serializer to handle turning our `User` object into something that
-        # can be JSONified and sent to the client.
         serializer = self.serializer_class(request.user)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -88,7 +82,6 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# @login_required(login_url='/users/login/')
 @api_view(['POST'])
 @permission_classes([p.IsAuthenticated, ])
 def upload_avatar(request, id):
@@ -100,3 +93,4 @@ def upload_avatar(request, id):
         print("")
 
     return Response(status=status.HTTP_200_OK)
+
