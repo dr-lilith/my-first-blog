@@ -38,6 +38,10 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'post_list'
 LOGOUT_REDIRECT_URL = 'post_list'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -51,6 +55,7 @@ INSTALLED_APPS = [
     'users',
     'rest_framework',
     'rest_framework_simplejwt',
+    # 'users.apps.UploadAppConfig',
 
 ]
 
@@ -93,7 +98,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'auth',
+        'NAME': 'myblog',
         'USER': 'djangoblog',
         'PASSWORD': '111',
         'HOST': 'localhost',

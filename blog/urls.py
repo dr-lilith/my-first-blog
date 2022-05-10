@@ -3,7 +3,6 @@ from . import views
 from django.contrib.auth import views as auth_views
 
 
-
 urlpatterns = [
     path('', views.post_list, name='post_list'),
     path('post/<int:pk>/', views.post_detail, name='post_detail'),

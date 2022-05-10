@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 import rest_framework.permissions as p
 from .serializers import UserSerializer
@@ -5,10 +6,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from . models import User
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import *
 from django.contrib.auth.signals import user_logged_in
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticated
+
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -23,8 +25,10 @@ class CreateUserAPIView(APIView):
     # Allow any user (authenticated or not) to access this url
     permission_classes = (p.AllowAny,)
 
+    #@api_view(['POST'])
     def post(self, request):
         user = request.data
+        #user = User(request.data)
         serializer = UserSerializer(data=user)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -41,11 +45,13 @@ def authenticate_user(request):
         if user:
             try:
                 tokens = get_tokens_for_user(user)
-                user_details = {'name': "%s %s" % (
-                    user.first_name, user.last_name), 'token': tokens["access"], 'refresh_token': tokens["refresh"]}
+                user_details = {
+                    'name': f"{user.first_name} {user.last_name}",
+                    'token': tokens["access"],
+                    'refresh_token': tokens["refresh"]
+                }
                 #TODO figure out purpose of below
-                user_logged_in.send(sender=user.__class__,
-                                    request=request, user=user)
+                user_logged_in.send(sender=user.__class__, request=request, user=user)
                 return Response(user_details, status=status.HTTP_200_OK)
             except Exception as e:
                 raise e
@@ -80,3 +86,17 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# @login_required(login_url='/users/login/')
+@api_view(['POST'])
+@permission_classes([p.IsAuthenticated, ])
+def upload_avatar(request, id):
+    if not id:
+        id = request.user.id
+    if request.user.id == id or request.user.is_superuser:
+        first_key = request.FILES.keys[0]
+        uploaded_file = request.FILES[first_key]
+        print("")
+
+    return Response(status=status.HTTP_200_OK)

@@ -42,17 +42,22 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     """
     email = models.EmailField(max_length=40, unique=True)
+    username = models.CharField(max_length=40, unique=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
+    description = models.CharField(max_length=255, blank=True)
+    avatar = models.CharField(max_length=255, default='/static/noimage.jfif')
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'email' or 'username'
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
     def save(self, *args, **kwargs):
         super(User, self).save(*args, **kwargs)
         return self
+
+
