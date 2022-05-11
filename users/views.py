@@ -40,18 +40,15 @@ def authenticate_user(request):
         password = request.data['password']
         user = User.objects.get(email=email, password=password)
         if user:
-            try:
-                tokens = get_tokens_for_user(user)
-                user_details = {
-                    'name': f"{user.first_name} {user.last_name}",
-                    'token': tokens["access"],
-                    'refresh_token': tokens["refresh"]
-                }
-                #TODO figure out purpose of below
-                user_logged_in.send(sender=user.__class__, request=request, user=user)
-                return Response(user_details, status=status.HTTP_200_OK)
-            except Exception as e:
-                raise e
+            tokens = get_tokens_for_user(user)
+            user_details = {
+                'name': f"{user.first_name} {user.last_name}",
+                'token': tokens["access"],
+                'refresh_token': tokens["refresh"]
+            }
+            #TODO figure out purpose of below
+            user_logged_in.send(sender=user.__class__, request=request, user=user)
+            return Response(user_details, status=status.HTTP_200_OK)
         else:
             res = {
                 'error': 'can not authenticate with the given credentials or the account has been deactivated'}
