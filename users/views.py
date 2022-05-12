@@ -21,15 +21,14 @@ def get_tokens_for_user(user):
     }
 
 
-class CreateUserAPIView(APIView):
-    permission_classes = (p.AllowAny,)
-
-    def post(self, request):
-        user = request.data
-        serializer = UserSerializer(data=user)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+@api_view(['POST'])
+@permission_classes([p.AllowAny, ])
+def create_user(request):
+    user = request.data
+    serializer = UserSerializer(data=user)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 @api_view(['POST'])
@@ -58,25 +57,27 @@ def authenticate_user(request):
         return Response(res)
 
 
-class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = UserSerializer
+@api_view(['GET'])
+def get_user(request, self, *args, **kwargs):
+    serializer = self.serializer_class(request.user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def get(self, request, *args, **kwargs):
-        serializer = self.serializer_class(request.user)
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+@api_view(['GET'])
+@permission_classes([p.IsAdminUser, ])
+def get_users(request):
+    users = User.objects.all().values()
+    return Response(users, status=status.HTTP_200_OK)
 
-    def put(self, request, *args, **kwargs):
-        serializer_data = request.data.get('user', {})
 
-        serializer = UserSerializer(
-            request.user, data=serializer_data, partial=True
-        )
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
+@api_view(['PUT'])
+@permission_classes([p.IsAuthenticated, ])
+def update_user(request):
+    serializer_data = request.data.get('user', request.data)
+    serializer = UserSerializer(request.user, data=serializer_data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
