@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from.models import User
-
+from django.utils.timezone import datetime
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -9,33 +9,32 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = User
         fields = ('id', 'email', 'first_name', 'last_name',
-                  'date_joined', 'password', 'username', 'description', 'avatar')
-        extra_kwargs = {'password': {'write_only': True}}
+                  'date_joined', 'password1', 'password2', 'username', 'description', 'avatar')
+        extra_kwargs = {'password1': {'write_only': True}}
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
 
     date_joined = serializers.ReadOnlyField()
-    password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    password1 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
     password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
 
     class Meta(object):
         model = User
         fields = ('email', 'date_joined', 'password1', 'password2', 'username', 'avatar')
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {'password1': {'write_only': True}}
 
     def save(self):
         user = User(
             email=self.validated_data['email'],
             username=self.validated_data['username'],
-            avatar=self.validated_data['avatar'],
-            date_joined=self.validated_data['date_joined'],
+            date_joined=datetime.today(),
         )
-        password = self.validated_data['password']
+        password1 = self.validated_data['password1']
         password2 = self.validated_data['password2']
-        if password != password2:
+        if password1 != password2:
             raise serializers.ValidationError({'password': 'Пароли должны совпадать.'})
-        user.set_password(password)
+        user.set_password(password1)
         user.save()
         return user
 

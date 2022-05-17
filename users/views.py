@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 import rest_framework.permissions as p
-from .serializers import UserSerializer
+from .serializers import UserSerializer, RegistrationSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -25,7 +25,7 @@ def get_tokens_for_user(user):
 @permission_classes([p.AllowAny, ])
 def create_user(request):
     user = request.data
-    serializer = UserSerializer(data=user)
+    serializer = RegistrationSerializer(data=user)
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data, status=status.HTTP_201_CREATED)
