@@ -58,9 +58,11 @@ def authenticate_user(request):
 
 
 @api_view(['GET'])
+@permission_classes([p.IsAuthenticated, ])
 def get_user(request, self, *args, **kwargs):
     serializer = self.serializer_class(request.user)
     return Response(serializer.data, status=status.HTTP_200_OK)
+    # return Response(user_details, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
