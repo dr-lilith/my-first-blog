@@ -26,21 +26,11 @@ def post_detail(request, id):
 @api_view(['POST'])
 @permission_classes([p.IsAuthenticated, ])
 def post_new(request):
-    if request.method == "POST":
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.published_date = timezone.now()
-            post.save()
-            post = request.data
-            serializer = PostSerializer(data=post)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-    else:
-        form = PostForm()
-    return Response(PostSerializer.data, status=status.HTTP_201_CREATED)
+    serializer = PostSerializer(data=request.data)
+    serializer.initial_data["author"] = request.user.id
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 @api_view(['PUT'])
