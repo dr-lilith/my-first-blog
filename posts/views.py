@@ -11,7 +11,6 @@ from .serializers import *
 
 @api_view(['GET'])
 def post_list(request):
-    # posts = Post.objects.all(is_deleted=False).values()
     posts = Post.objects.filter(is_deleted=False).values()
     return Response(posts, status=status.HTTP_200_OK)
 
@@ -45,10 +44,6 @@ def post_edit(request, id):
 
 @api_view(['DELETE'])
 @permission_classes([p.IsAuthenticated, ])
-# def post_delete(request, id):
-#     post = get_object_or_404(Post, id=id)
-#     post.delete()
-#     return Response(status=status.HTTP_204_NO_CONTENT)
 def post_delete(request, id):
     post = get_object_or_404(Post, id=id)
     post.is_deleted = True
