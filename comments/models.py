@@ -5,7 +5,7 @@ from posts.models import Post
 
 
 class Comment(models.Model):
-    postId = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     text = models.TextField(max_length=200, null=False, blank=False)
     created_date = models.DateTimeField(default=timezone.now)
