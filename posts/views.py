@@ -25,7 +25,7 @@ def post_detail(request, id):
 @permission_classes([p.IsAuthenticated, ])
 def post_new(request):
     serializer = PostSerializer(data=request.data)
-    serializer.initial_data["author"] = request.user.id
+    serializer.initial_data["author_id"] = request.user.id
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data, status=status.HTTP_201_CREATED)
