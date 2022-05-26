@@ -1,21 +1,20 @@
 import rest_framework.permissions as p
 from rest_framework.decorators import api_view, permission_classes
 from django.shortcuts import render, get_object_or_404, redirect
-from django.utils import timezone
-from .models import Post
-from .forms import PostForm
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import *
 
 
 @api_view(['GET'])
+@permission_classes([p.AllowAny, ])
 def post_list(request):
     posts = Post.objects.filter(is_deleted=False).values()
     return Response(posts, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
+@permission_classes([p.AllowAny, ])
 def post_detail(request, id):
     post = get_object_or_404(Post, id=id)
     serializer = PostSerializer(post)
