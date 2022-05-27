@@ -8,6 +8,7 @@ from rest_framework.decorators import api_view, permission_classes
 from . models import User
 from rest_framework_simplejwt.tokens import *
 from django.contrib.auth.signals import user_logged_in
+from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 
@@ -59,10 +60,10 @@ def authenticate_user(request):
 
 @api_view(['GET'])
 @permission_classes([p.IsAuthenticated, ])
-def get_user(request, self, *args, **kwargs):
-    serializer = self.serializer_class(request.user)
+def get_user(request, id):
+    user = get_object_or_404(User, id=id)
+    serializer = UserSerializer(user)
     return Response(serializer.data, status=status.HTTP_200_OK)
-    # return Response(user_details, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
