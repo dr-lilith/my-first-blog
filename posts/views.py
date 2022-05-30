@@ -70,8 +70,8 @@ def like(request, id):
 @permission_classes([p.IsAuthenticated, ])
 def dislike(request, id):
     post = get_object_or_404(Post, id=id)
-    user = request.user.id
-    reaction = Reaction.objects.get(post=post, user=user)
+    user = request.user
+    reaction = Reaction.objects.filter(post=post, user=user).first()
     if not reaction:
         reaction = Reaction()
         reaction.post = post
@@ -85,9 +85,25 @@ def dislike(request, id):
 @permission_classes([p.IsAuthenticated, ])
 def cancel_reaction(request, id):
     post = get_object_or_404(Post, id=id)
-    user = request.user.id
-    reaction = Reaction.objects.get(post=post, user=user)
+    user = request.user
+    reaction = Reaction.objects.filter(post=post, user=user).first()
     if reaction:
         reaction.vote = 0
         reaction.save()
     return Response({}, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([p.AllowAny, ])
+def count_likes(request, id):
+    post = get_object_or_404(Post, id=id)
+    likes = Reaction.objects.filter(post=post, vote=1).count()
+    return Response({likes}, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([p.AllowAny, ])
+def count_dislikes(request, id):
+    post = get_object_or_404(Post, id=id)
+    dislikes = Reaction.objects.filter(post=post, vote=-1).count()
+    return Response({dislikes}, status=status.HTTP_200_OK)
