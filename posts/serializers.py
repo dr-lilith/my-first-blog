@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from.models import Post
+from.models import *
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -24,3 +24,4 @@ class PostUpdateSerializer(serializers.ModelSerializer):
         post.text = validated_data['text']
         post.save()
         return post
+

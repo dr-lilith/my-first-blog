@@ -19,3 +19,13 @@ class Post(models.Model):
         return self.title
 
 
+class Reaction(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    vote = models.IntegerField(default=0, null=False)
+
+    class Meta:
+        unique_together = ('post', 'user',)
+
+    def __str__(self):
+        return self.vote
