@@ -19,3 +19,13 @@ class Post(models.Model):
         return self.title
 
 
+class Tag(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    tag = models.CharField(max_length=200, null=False, blank=False)
+
+    class Meta:
+        unique_together = ('post', 'author',)
+
+    def __str__(self):
+        return self.tag
