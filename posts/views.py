@@ -3,8 +3,8 @@ from rest_framework.decorators import api_view, permission_classes
 from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import *
-from .models import *
+from .serializers import PostSerializer, PostUpdateSerializer
+from .models import Post, Reaction
 
 
 @api_view(['GET'])
