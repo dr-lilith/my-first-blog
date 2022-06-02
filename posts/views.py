@@ -15,10 +15,10 @@ def post_list(request):
 
 
 @api_view(['GET'])
-@permission_classes([p.AllowAny, ])
+@permission_classes([p.IsAuthenticatedOrReadOnly, ])
 def post_detail(request, id):
     post = get_object_or_404(Post, id=id)
-    serializer = PostSerializer(post)
+    serializer = PostSerializer(post, context={'request': request})
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -51,7 +51,7 @@ def post_delete(request, id):
     return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes([p.IsAuthenticated, ])
 def like(request, id):
     post = get_object_or_404(Post, id=id)
@@ -61,12 +61,12 @@ def like(request, id):
         reaction = Reaction()
         reaction.post = post
         reaction.user = user
-    reaction.vote = 1
+    reaction.vote = True
     reaction.save()
     return Response({}, status=status.HTTP_200_OK)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes([p.IsAuthenticated, ])
 def dislike(request, id):
     post = get_object_or_404(Post, id=id)
@@ -76,20 +76,19 @@ def dislike(request, id):
         reaction = Reaction()
         reaction.post = post
         reaction.user = user
-    reaction.vote = -1
+    reaction.vote = False
     reaction.save()
     return Response({}, status=status.HTTP_200_OK)
 
 
-@api_view(['GET'])
+@api_view(['DELETE'])
 @permission_classes([p.IsAuthenticated, ])
 def cancel_reaction(request, id):
     post = get_object_or_404(Post, id=id)
     user = request.user
     reaction = Reaction.objects.filter(post=post, user=user).first()
     if reaction:
-        reaction.vote = 0
-        reaction.save()
+        reaction.delete()
     return Response({}, status=status.HTTP_200_OK)
 
 
@@ -97,7 +96,7 @@ def cancel_reaction(request, id):
 @permission_classes([p.AllowAny, ])
 def count_likes(request, id):
     post = get_object_or_404(Post, id=id)
-    likes = Reaction.objects.filter(post=post, vote=1).count()
+    likes = Reaction.objects.filter(post=post, vote=True).count()
     return Response({likes}, status=status.HTTP_200_OK)
 
 
@@ -105,5 +104,5 @@ def count_likes(request, id):
 @permission_classes([p.AllowAny, ])
 def count_dislikes(request, id):
     post = get_object_or_404(Post, id=id)
-    dislikes = Reaction.objects.filter(post=post, vote=-1).count()
+    dislikes = Reaction.objects.filter(post=post, vote=False).count()
     return Response({dislikes}, status=status.HTTP_200_OK)
