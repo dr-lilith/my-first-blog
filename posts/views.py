@@ -91,3 +91,27 @@ def cancel_reaction(request, id):
         reaction.delete()
     return Response({}, status=status.HTTP_200_OK)
 
+
+@api_view(['POST'])
+@permission_classes([p.IsAuthenticated, ])
+def add_tag(request, id):
+    post = get_object_or_404(Post, id=id)
+    new_tag = Tag.objects.filter(tag=request.data['tag']).first()
+    if not new_tag:
+        new_tag = Tag()
+        new_tag.tag = request.data['tag']
+        new_tag.author = request.user
+        new_tag.save()
+    post.tag.add(new_tag)
+    return Response({}, status=status.HTTP_200_OK)
+
+
+@api_view(['DELETE'])
+@permission_classes([p.IsAuthenticated, ])
+def delete_tag(request, id):
+    post = get_object_or_404(Post, id=id)
+    removable_tag = Tag.objects.filter(tag=request.data['tag'], post=post).first()
+    if removable_tag:
+        post.tag.remove(removable_tag)
+        post.save()
+    return Response({}, status=status.HTTP_200_OK)
