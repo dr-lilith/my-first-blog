@@ -18,7 +18,6 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-
 class Tag(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -29,3 +28,14 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.tag
+
+class Reaction(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    vote = models.BooleanField(blank=True, null=True)
+
+    class Meta:
+        unique_together = ('post', 'user',)
+
+    def __str__(self):
+        return self.vote
