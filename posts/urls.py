@@ -10,8 +10,6 @@ urlpatterns = [
     path('<int:id>/like', views.like),
     path('<int:id>/dislike', views.dislike),
     path('<int:id>/cancel_reaction', views.cancel_reaction),
-    path('<int:id>/count_likes', views.count_likes),
-    path('<int:id>/count_dislikes', views.count_dislikes),
     path('<int:id>/delete', views.post_delete)
 ]
 

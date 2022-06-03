@@ -91,18 +91,3 @@ def cancel_reaction(request, id):
         reaction.delete()
     return Response({}, status=status.HTTP_200_OK)
 
-
-@api_view(['GET'])
-@permission_classes([p.AllowAny, ])
-def count_likes(request, id):
-    post = get_object_or_404(Post, id=id)
-    likes = Reaction.objects.filter(post=post, vote=True).count()
-    return Response({likes}, status=status.HTTP_200_OK)
-
-
-@api_view(['GET'])
-@permission_classes([p.AllowAny, ])
-def count_dislikes(request, id):
-    post = get_object_or_404(Post, id=id)
-    dislikes = Reaction.objects.filter(post=post, vote=False).count()
-    return Response({dislikes}, status=status.HTTP_200_OK)
