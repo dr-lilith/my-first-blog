@@ -115,3 +115,22 @@ def delete_tag(request, id):
         post.tag.remove(removable_tag)
         post.save()
     return Response({}, status=status.HTTP_200_OK)
+
+
+# @api_view(['GET'])
+# @permission_classes([p.AllowAny, ])
+# def search_by_tag(request):
+#     searched_tag = list(Tag.objects.filter(tag=request.data['tag']).all())
+#     searched_posts = []
+#     for tag in searched_tag:
+#         if tag.post not in searched_posts:
+#             searched_posts.append(tag.post)
+#     return Response(type(searched_tag), status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([p.AllowAny, ])
+def search_by_tag(request):
+    searched_tag = Tag.objects.filter(tag=request.data['tag']).first()
+    searched_posts = Post.objects.filter(tag=searched_tag).all()
+    return Response(searched_posts.values(), status=status.HTTP_200_OK)
