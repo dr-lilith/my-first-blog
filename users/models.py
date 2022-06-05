@@ -32,6 +32,10 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password=password, **extra_fields)
 
 
+def upload_to(instance, filename):
+    return f'images/{filename}'
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     """
     An abstract base class implementing a fully featured User model with
@@ -46,7 +50,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
     description = models.CharField(max_length=255, blank=True)
-    avatar = models.CharField(max_length=255, default='/static/noimage.jfif')
+    avatar = models.ImageField(upload_to=upload_to, blank=False, null=False, default='images/noimage-300x300.png')
 
     objects = UserManager()
 
