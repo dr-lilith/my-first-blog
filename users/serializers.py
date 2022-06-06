@@ -40,7 +40,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return user
 
 
-class UploadAvatarSerializer(serializers.HyperlinkedModelSerializer):
+class UploadAvatarSerializer(serializers.ModelSerializer):
     avatar = serializers.ImageField(required=True)
 
     class Meta(object):
