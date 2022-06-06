@@ -2,6 +2,7 @@ from rest_framework import serializers
 from.models import User
 from django.utils.timezone import datetime
 
+
 class UserSerializer(serializers.ModelSerializer):
 
     date_joined = serializers.ReadOnlyField()
@@ -9,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = User
         fields = ('id', 'email', 'first_name', 'last_name',
-                  'date_joined', 'password1', 'password2', 'username', 'description', 'avatar')
+                  'date_joined', 'username', 'description', 'avatar')
         extra_kwargs = {'password1': {'write_only': True}}
 
 
@@ -38,3 +39,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+
+class UploadAvatarSerializer(serializers.HyperlinkedModelSerializer):
+    avatar = serializers.ImageField(required=True)
+
+    class Meta(object):
+        model = User
+        fields = ['avatar']
