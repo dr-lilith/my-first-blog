@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 import rest_framework.permissions as p
-from .serializers import UserSerializer, RegistrationSerializer
+from .serializers import UserSerializer, RegistrationSerializer, UploadAvatarSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -59,9 +59,9 @@ def authenticate_user(request):
 
 
 @api_view(['GET'])
-@permission_classes([p.IsAuthenticated, ])
-def get_user(request, id):
-    user = get_object_or_404(User, id=id)
+@permission_classes([p.IsAdminUser, ])
+def get_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
     serializer = UserSerializer(user)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -71,6 +71,14 @@ def get_user(request, id):
 def get_users(request):
     users = User.objects.all().values()
     return Response(users, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([p.IsAuthenticated, ])
+def my_profile(request):
+    user = get_object_or_404(User, id=request.user.id)
+    serializer = UserSerializer(user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['PUT'])
@@ -85,13 +93,10 @@ def update_user(request):
 
 @api_view(['POST'])
 @permission_classes([p.IsAuthenticated, ])
-def upload_avatar(request, id):
-    if not id:
-        id = request.user.id
-    if request.user.id == id or request.user.is_superuser:
-        first_key = request.FILES.keys[0]
-        uploaded_file = request.FILES[first_key]
-        print("")
+def upload_avatar(request):
+    serializer = UploadAvatarSerializer(request.user, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
 
-    return Response(status=status.HTTP_200_OK)
+    return Response({}, status=status.HTTP_200_OK)
 

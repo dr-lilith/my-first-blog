@@ -7,5 +7,7 @@ urlpatterns = [
     path('login', views.authenticate_user),
     path('update', views.update_user),
     path('', views.get_users),
-    path('<int:id>/upload_avatar', views.upload_avatar)
+    path('<int:user_id>', views.get_user),
+    path('upload_avatar', views.upload_avatar),
+    path('profile', views.my_profile)
 ]
