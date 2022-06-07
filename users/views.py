@@ -1,6 +1,5 @@
-from django.contrib.auth.decorators import login_required
-from rest_framework.views import APIView
 import rest_framework.permissions as p
+import os
 from .serializers import UserSerializer, RegistrationSerializer, UploadAvatarSerializer
 from rest_framework.response import Response
 from rest_framework import status
@@ -8,9 +7,9 @@ from rest_framework.decorators import api_view, permission_classes
 from . models import User
 from rest_framework_simplejwt.tokens import *
 from django.contrib.auth.signals import user_logged_in
-from django.shortcuts import render, get_object_or_404, redirect
-from rest_framework.generics import RetrieveUpdateAPIView
-from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
+from django.core.files import File
+import urllib.request
 
 
 def get_tokens_for_user(user):
@@ -97,6 +96,19 @@ def upload_avatar(request):
     serializer = UploadAvatarSerializer(request.user, data=request.data, partial=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()
-
     return Response({}, status=status.HTTP_200_OK)
 
+
+@api_view(['POST'])
+@permission_classes([p.IsAuthenticated, ])
+def upload_avatar_from_url(request):
+    user = request.user
+    ava_url = request.data.get('url')
+    result = urllib.request.urlretrieve(ava_url)
+    user.avatar.save(
+        f'{user.id}-{os.path.basename(ava_url)}',
+        File(open(result[0], 'rb'))
+    )
+    user.save()
+
+    return Response({}, status=status.HTTP_200_OK)
