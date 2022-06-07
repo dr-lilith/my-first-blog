@@ -92,6 +92,13 @@ def cancel_reaction(request, id):
     return Response({}, status=status.HTTP_200_OK)
 
 
+@api_view(['GET'])
+@permission_classes([p.IsAuthenticated, ])
+def search_tag(request, id):
+    tag_list = Tag.objects.filter(tag__startswith=request.data['tag']).values()[:10]
+    return Response({tag_list}, status=status.HTTP_200_OK)
+
+
 @api_view(['POST'])
 @permission_classes([p.IsAuthenticated, ])
 def add_tag(request, id):
@@ -107,7 +114,7 @@ def add_tag(request, id):
 
 
 @api_view(['DELETE'])
-@permission_classes([p.IsAuthenticated, ])
+@permission_classes([p.IsAdminUser, ])
 def delete_tag(request, id):
     post = get_object_or_404(Post, id=id)
     removable_tag = Tag.objects.filter(tag=request.data['tag'], post=post).first()
