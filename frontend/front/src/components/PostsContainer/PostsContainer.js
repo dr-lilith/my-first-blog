@@ -1,5 +1,6 @@
 import styles from "./PostsContainer.module.css"
 import React, { useState, useEffect } from 'react';
+import Post from "../Post/Post"
 
 
 const PostsContainer=()=> {
@@ -33,7 +34,7 @@ const PostsContainer=()=> {
       <ul>
         {items.map(item => (
           <li key={item.id}>
-            {item.author_id_id} {item.title} {item.text} 
+            <Post postData = {item}/> 
           </li>//todo Create Component for PostPreview (Title, Start of text, link to full post)
         ))}
       </ul>
