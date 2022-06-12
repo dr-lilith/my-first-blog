@@ -1,7 +1,8 @@
-import styles from "./Counter.module.css"
+import styles from "./PostsContainer.module.css"
 import React, { useState, useEffect } from 'react';
 
-const Counter=()=> {
+
+const PostsContainer=()=> {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
@@ -23,17 +24,6 @@ const Counter=()=> {
       )
   }, [])
 
-  // return (
-  //   <div className={styles.container}>
-  //     <h1>Counter</h1>
-  //     <div>
-  //       <button>-</button>
-  //       <span>0</span>
-  //       <button>+</button>
-        
-  //     </div>
-  //   </div>
-  // );
   if (error) {
     return <div>Ошибка: {error.message}</div>;
   } else if (!isLoaded) {
@@ -43,8 +33,8 @@ const Counter=()=> {
       <ul>
         {items.map(item => (
           <li key={item.id}>
-            {item.author_id_id} {item.title} {item.text}
-          </li>
+            {item.author_id_id} {item.title} {item.text} 
+          </li>//todo Create Component for PostPreview (Title, Start of text, link to full post)
         ))}
       </ul>
     );
@@ -52,4 +42,4 @@ const Counter=()=> {
 
 }
 
-export default Counter;
+export default PostsContainer;

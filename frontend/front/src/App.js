@@ -1,9 +1,9 @@
-import Counter from "./components/Counter/Counter"
+import PostsContainer from "./components/PostsContainer/PostsContainer"
 function App() {
   return (
     <div className="App">
       My app
-      <Counter/>
+      <PostsContainer/>
     </div>
   );
 }
