@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import styles from "./UserProfile.module.css"
-import React from 'react'
 
 
 const UserProfile=()=> {
@@ -9,10 +8,16 @@ const UserProfile=()=> {
   const [items, setItems] = useState([]);
   
   useEffect(() => {
-    fetch("/users/profile")
-      .then(res => res.json())
+    
+    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjYxMTQwOTcwLCJpYXQiOjE2NTUxNDEwMzAsImp0aSI6ImM1MGE4N2VjYTc5YTQ4NGRiNTdmZjk5NjVlODc1ZDkzIiwidXNlcl9pZCI6OH0.L2K3ymjvGTMUzwoAqhJPQvnG70mqsY9GefZloQ2e4zA";
+    let headers = new Headers({ 'Authorization': `Bearer ${token}`});
+
+    fetch("/users/profile", { "headers": headers, })
+      .then(res => {
+        return res.json()})
       .then(
         (result) => {
+          console.log(result)
           setIsLoaded(true);
           setItems(result);
         },
@@ -31,22 +36,25 @@ const UserProfile=()=> {
     return (
         <div>
             <h1>
-                {UserProfileData.first_name}
+                {items.first_name}
             </h1>
             <h1>
-                {UserProfileData.last_name}
+                {items.last_name}
             </h1>
             <h1>
-                {UserProfileData.username}
+                {items.username}
             </h1>
             <p>
-                {UserProfileData.email}
+                {items.email}
             </p>
             <p>
-                {UserProfileData.date_joined}  
+                {items.date_joined}  
             </p>
             <p>
-                {UserProfileData.description}  
+                {items.description}  
+            </p>
+            <p>
+                <img src={items.avatar} alt='avatar'/>
             </p>
             {
     
