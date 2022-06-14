@@ -1,11 +1,14 @@
+import Header from "./components/Header/Header";
 import PostsContainer from "./components/PostsContainer/PostsContainer"
 import UserProfile from "./components/UserProfile/UserProfile";
 function App() {
   return (
     <div className="App">
-      My app
-      <UserProfile/>
-      <PostsContainer/>
+      <Header/>
+      <div style={{paddingTop: '70px'}}>
+        <UserProfile/>
+        <PostsContainer/>
+      </div>
     </div>
   );
 }

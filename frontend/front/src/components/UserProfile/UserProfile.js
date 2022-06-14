@@ -27,15 +27,24 @@ const UserProfile=()=> {
         }
       )
   }, [])
-
+    // return number if number >= 0 else -number
   if (error) {
     return <div>Ошибка: {error.message}</div>;
   } else if (!isLoaded) {
     return <div>Загрузка...</div>;
   } else {
     return (
-        <div>
-            <h1>
+        <div className={styles.UserProfile}>
+          <div>
+            <p>
+                <img src={items.avatar} alt='avatar'/>
+            </p>
+            <p>
+                <button className={styles.btn}>Обновить фото</button>
+            </p>
+          </div>
+          <div>
+          <h1>
                 {items.first_name}
             </h1>
             <h1>
@@ -48,18 +57,14 @@ const UserProfile=()=> {
                 {items.email}
             </p>
             <p>
-                {items.date_joined}  
+                {new Date(items.date_joined).toLocaleDateString()}  
             </p>
             <p>
                 {items.description}  
             </p>
-            <p>
-                <img src={items.avatar} alt='avatar'/>
-            </p>
+          </div>
             {
     
-    
-    // "avatar": "/media/images/20-shutterstock_557126443-1024x683.jpg"
 }
         </div>
     );

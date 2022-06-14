@@ -1,0 +1,45 @@
+.container {
+    position: fixed;
+    width: 100%;
+    height: 70px;
+    background-color: rgb(149, 55, 212);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.headline {
+    color:aliceblue;
+    margin-left: 200px;
+}
+.buttons {
+    margin-right: 30px;
+}
+.newPost {
+    width: 150px;
+    margin-right: 10px;
+    padding: 15px;
+    cursor: pointer;
+    font-size: 1em;
+    color: rgb(108, 44, 145);
+    outline: none;
+    font-weight: 900;
+    border-radius: 10px;
+    border: none;
+  }
+  .newPost:hover{
+    background-color: rgb(180, 172, 179);
+  }
+  .logOut {
+    width: 150px;
+    padding: 15px;
+    cursor: pointer;
+    font-size: 1em;
+    color: rgb(123, 47, 126);
+    outline: none;
+    font-weight: 900;
+    border-radius: 10px;
+    border: none;
+  }
+  .logOut:hover{
+    background-color: rgb(180, 172, 179);
+  }
