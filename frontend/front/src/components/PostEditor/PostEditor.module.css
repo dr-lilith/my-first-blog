@@ -1,3 +1,8 @@
+
+.PostEditor{
+    margin-left: 500px;
+}
+
 .btn {
     width: 300px;
     margin-right: 10px;
@@ -11,3 +16,9 @@
     border-radius: 10px;
     border: 1px solid rgb(100, 12, 100);
   }
+  .btn:hover{
+    background-color: rgb(194, 194, 194);
+  }
+  .CreateNewPost {
+    color:rgb(128, 66, 179);
+}

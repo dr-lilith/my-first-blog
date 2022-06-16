@@ -18,6 +18,9 @@
     border-radius: 10px;
     border: 1px solid rgb(100, 12, 100);
   }
+  .btn:hover{
+    background-color: rgb(194, 194, 194);
+  }
   
   /* .btn.light {
     background-color: #4eafc9;
