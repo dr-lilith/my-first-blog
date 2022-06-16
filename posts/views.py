@@ -15,6 +15,14 @@ def post_list(request):
 
 
 @api_view(['GET'])
+@permission_classes([p.IsAuthenticated, ])
+def users_posts(request):
+    user = request.user
+    posts = Post.objects.filter(is_deleted=False, author_id=user).values()
+    return Response(posts, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
 @permission_classes([p.IsAuthenticatedOrReadOnly, ])
 def post_detail(request, id):
     post = get_object_or_404(Post, id=id)
