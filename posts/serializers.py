@@ -45,3 +45,11 @@ class PostUpdateSerializer(serializers.ModelSerializer):
         post.text = validated_data['text']
         post.save()
         return post
+
+
+class UploadPostPhotoSerializer(serializers.ModelSerializer):
+    post_photo = serializers.ImageField(required=True)
+
+    class Meta(object):
+        model = Post
+        fields = ['post_photo']
