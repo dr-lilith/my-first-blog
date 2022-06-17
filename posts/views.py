@@ -5,6 +5,23 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import PostSerializer, PostUpdateSerializer
 from .models import Post, Tag, Reaction
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+
+@api_view(['GET'])
+@permission_classes([p.AllowAny, ])
+def paging_posts(request):
+    posts = Post.objects.filter(is_deleted=False).values()
+    page_num = int(request.GET.get('page', 1))
+    page_size = int(request.GET.get('size', 10))
+    paginator = Paginator(posts, page_size)
+    try:
+        page_posts = paginator.page(page_num)
+    except PageNotAnInteger:
+        page_posts = paginator.page(1)
+    except EmptyPage:
+        return Response({}, status=status.HTTP_200_OK)
+    return Response(page_posts.object_list, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
@@ -19,7 +36,16 @@ def post_list(request):
 def users_posts(request):
     user = request.user
     posts = Post.objects.filter(is_deleted=False, author_id=user).values()
-    return Response(posts, status=status.HTTP_200_OK)
+    page_num = int(request.GET.get('page', 1))
+    page_size = int(request.GET.get('size', 10))
+    paginator = Paginator(posts, page_size)
+    try:
+        page_posts = paginator.page(page_num)
+    except PageNotAnInteger:
+        page_posts = paginator.page(1)
+    except EmptyPage:
+        return Response({}, status=status.HTTP_200_OK)
+    return Response(page_posts.object_list, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
