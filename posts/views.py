@@ -33,7 +33,7 @@ def post_list(request):
 
 @api_view(['GET'])
 @permission_classes([p.IsAuthenticated, ])
-def users_posts(request):
+def user_posts(request):
     user = request.user
     posts = Post.objects.filter(is_deleted=False, author_id=user).values()
     page_num = int(request.GET.get('page', 1))
