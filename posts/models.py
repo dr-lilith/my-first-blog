@@ -8,10 +8,15 @@ class Tag(models.Model):
     tag = models.CharField(max_length=200, null=False, blank=False)
 
 
+def upload_to(instance, filename):
+    return f'images/{filename}'
+
+
 class Post(models.Model):
     author_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=200, null=False, blank=False)
     text = models.TextField(null=False, blank=False)
+    post_photo = models.ImageField(upload_to=upload_to, blank=True, null=True)
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
     is_deleted = models.BooleanField(default=False, null=False)

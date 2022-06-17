@@ -3,8 +3,11 @@ from rest_framework.decorators import api_view, permission_classes
 from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import PostSerializer, PostUpdateSerializer
+from .serializers import PostSerializer, PostUpdateSerializer, UploadPostPhotoSerializer
 from .models import Post, Tag, Reaction
+import urllib.request
+from django.core.files import File
+import os
 
 
 @api_view(['GET'])
@@ -130,3 +133,27 @@ def search_by_tag(request):
     searched_tag = Tag.objects.filter(tag=request.data['tag']).first()
     searched_posts = Post.objects.filter(tag=searched_tag).all()
     return Response(searched_posts.values(), status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([p.IsAuthenticated, ])
+def upload_post_photo(request,id):
+    serializer = UploadPostPhotoSerializer(request.user, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response({}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([p.IsAuthenticated, ])
+def upload_post_photo_from_url(request,id):
+    post = get_object_or_404(Post, id=id)
+    photo_url = request.data.get('url')
+    result = urllib.request.urlretrieve(photo_url)
+    post.post_photo.save(
+        f'{post.id}-{os.path.basename(photo_url)}',
+        File(open(result[0], 'rb'))
+    )
+    post.save()
+
+    return Response({}, status=status.HTTP_200_OK)
