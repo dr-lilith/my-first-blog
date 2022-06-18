@@ -5,7 +5,8 @@ from . import views
 urlpatterns = [
     path('create', views.post_new),
     path('<int:id>/edit', views.post_edit),
-    path('', views.post_list),
+    path('', views.paging_posts),
+    path('user-posts', views.user_posts),
     path('<int:id>', views.post_detail),
     path('<int:id>/like', views.like),
     path('<int:id>/dislike', views.dislike),
@@ -14,6 +15,8 @@ urlpatterns = [
     path('<int:id>/add_tag', views.add_tag),
     path('<int:id>/search_tag', views.search_tag),
     path('<int:id>/delete_tag', views.delete_tag),
-    path('search_by_tag', views.search_by_tag)
+    path('search_by_tag', views.search_by_tag),
+    path('<int:id>/upload_post_photo', views.upload_post_photo),
+    path('<int:id>/upload_post_photo_from_url', views.upload_post_photo_from_url),
 ]
 
