@@ -27,7 +27,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         model = Post
-        fields = ('id', 'author_id', 'title', 'text',
+        fields = ('id', 'author_id', 'title', 'text', 'post_photo',
                   'created_date', 'published_date', 'is_deleted', 'likes', 'dislikes', 'my_like')
 
 
@@ -45,3 +45,11 @@ class PostUpdateSerializer(serializers.ModelSerializer):
         post.text = validated_data['text']
         post.save()
         return post
+
+
+class UploadPostPhotoSerializer(serializers.ModelSerializer):
+    post_photo = serializers.ImageField(required=True)
+
+    class Meta(object):
+        model = Post
+        fields = ['post_photo']
