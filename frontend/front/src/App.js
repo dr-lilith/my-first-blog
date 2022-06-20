@@ -3,7 +3,7 @@ import NewPost from "./components/NewPost/NewPost";
 import PostsContainer from "./components/PostsContainer/PostsContainer"
 import UserProfile from "./components/UserProfile/UserProfile";
 import './App.css'
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Registration from "./components/Registration/Registration";
 function App() {
   return (
