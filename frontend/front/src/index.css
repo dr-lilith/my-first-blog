@@ -20,13 +20,13 @@ body::-webkit-scrollbar {
  
 
 body::-webkit-scrollbar-thumb {
-  background: red !important; 
+  background: rgb(91, 20, 112) !important; 
   border-radius: 10px;
 }
 
 
 body::-webkit-scrollbar-thumb:hover {
-  background: #b30000 !important; 
+  background: #6b1a72 !important; 
 }
 
 button {
