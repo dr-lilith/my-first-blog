@@ -1,4 +1,4 @@
-import styles from "./PostsContainer.module.css"
+// import styles from "./PostsContainer.module.css"
 import React, { useState, useEffect } from 'react';
 import Post from "../Post/Post"
 
