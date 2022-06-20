@@ -3,8 +3,28 @@ from rest_framework.decorators import api_view, permission_classes
 from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import PostSerializer, PostUpdateSerializer
+from .serializers import PostSerializer, PostUpdateSerializer, UploadPostPhotoSerializer
 from .models import Post, Tag, Reaction
+import urllib.request
+from django.core.files import File
+import os
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+
+@api_view(['GET'])
+@permission_classes([p.AllowAny, ])
+def paging_posts(request):
+    posts = Post.objects.filter(is_deleted=False).values()
+    page_num = int(request.GET.get('page', 1))
+    page_size = int(request.GET.get('size', 10))
+    paginator = Paginator(posts, page_size)
+    try:
+        page_posts = paginator.page(page_num)
+    except PageNotAnInteger:
+        page_posts = paginator.page(1)
+    except EmptyPage:
+        return Response({}, status=status.HTTP_200_OK)
+    return Response(page_posts.object_list, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
@@ -12,6 +32,23 @@ from .models import Post, Tag, Reaction
 def post_list(request):
     posts = Post.objects.filter(is_deleted=False).values()
     return Response(posts, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([p.IsAuthenticated, ])
+def user_posts(request):
+    user = request.user
+    posts = Post.objects.filter(is_deleted=False, author_id=user).values()
+    page_num = int(request.GET.get('page', 1))
+    page_size = int(request.GET.get('size', 10))
+    paginator = Paginator(posts, page_size)
+    try:
+        page_posts = paginator.page(page_num)
+    except PageNotAnInteger:
+        page_posts = paginator.page(1)
+    except EmptyPage:
+        return Response({}, status=status.HTTP_200_OK)
+    return Response(page_posts.object_list, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
@@ -130,3 +167,27 @@ def search_by_tag(request):
     searched_tag = Tag.objects.filter(tag=request.data['tag']).first()
     searched_posts = Post.objects.filter(tag=searched_tag).all()
     return Response(searched_posts.values(), status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([p.IsAuthenticated, ])
+def upload_post_photo(request,id):
+    serializer = UploadPostPhotoSerializer(request.user, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response({}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([p.IsAuthenticated, ])
+def upload_post_photo_from_url(request,id):
+    post = get_object_or_404(Post, id=id)
+    photo_url = request.data.get('url')
+    result = urllib.request.urlretrieve(photo_url)
+    post.post_photo.save(
+        f'{post.id}-{os.path.basename(photo_url)}',
+        File(open(result[0], 'rb'))
+    )
+    post.save()
+
+    return Response({}, status=status.HTTP_200_OK)
