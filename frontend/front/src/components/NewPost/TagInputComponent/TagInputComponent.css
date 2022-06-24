@@ -1,11 +1,8 @@
-/* Example Styles for React Tags*/
 .app {
     padding: 40px;
     text-align: center;
   }
-  
-  /* Example Styles for React Tags*/
-  
+    
   .container {
     margin: auto;
     width: 50%;
@@ -75,3 +72,4 @@
     background: none;
     color: white;
   }
+  

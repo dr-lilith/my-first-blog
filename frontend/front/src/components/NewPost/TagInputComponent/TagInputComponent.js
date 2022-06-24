@@ -246,7 +246,6 @@ const TagsInputComponent = () => {
     newTags.splice(currPos, 1);
     newTags.splice(newPos, 0, tag);
 
-    // re-render
     setTags(newTags);
   };
 
