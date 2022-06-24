@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import styles from "./SinglePost.module.css"
+import Comment from './CommentComponent/Comment';
 
 
 const SinglePost=()=> {
@@ -63,6 +64,7 @@ const SinglePost=()=> {
                     <p>
                         {new Date(post.created_date).toLocaleDateString()}  
                     </p> 
+                    <Comment/>
                 </div>
 
             }
