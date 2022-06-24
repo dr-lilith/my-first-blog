@@ -7,21 +7,36 @@ const SinglePost=()=> {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);  
     const [post, setPost] = useState({})
+    const [author, setAuthor] = useState({})
     const {id} = useParams()
     useEffect(() => {
-        fetch(`/posts/${id}`)
-          .then(res => res.json())
-          .then(
-            (result) => {
-              setIsLoaded(true);
-              setPost(result)
-            },
-            (error) => {
-              setIsLoaded(true);
-              setError(error);
-            }
-          )
+        
+        async function getPostJson(postId){
+            return await fetch(`/posts/${postId}`)
+                .then(response => response.json());
+        }
+
+        async function getUserJson(userId){
+            return await fetch(`/users/${userId}`)
+                .then(response => response.json())
+        }
+
+        function processPostJson(json){
+            setPost(json);
+            getUserJson(json.author_id)
+                .then(userJson => setAuthor(userJson));
+        }
+
+        getPostJson(id)
+            .then(processPostJson,
+                err => {
+                    setIsLoaded(true);
+                    setError(err);
+                }
+            )
+            .then(_ => setIsLoaded(true))
       }, [])
+      
     return(
         <div className={styles.container}>
             {(error) && <div>Ошибка: {error.message}</div>}
@@ -42,6 +57,9 @@ const SinglePost=()=> {
                     <h1>
                         Dislikes : {post.dislikes}  
                     </h1>
+                    <p>
+                        Автор поста: {author.username}
+                    </p>
                     <p>
                         {new Date(post.created_date).toLocaleDateString()}  
                     </p> 

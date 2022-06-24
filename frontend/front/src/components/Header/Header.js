@@ -1,6 +1,6 @@
 import styles from "./Header.module.css"
 import React from 'react'
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { postsActions } from "../../store/store";
 
@@ -8,12 +8,13 @@ import { postsActions } from "../../store/store";
 const Header=()=> {
     const isLogin = useSelector((state) => state.isLogin)
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const loginHandler = ()=>{
         if (isLogin){
             dispatch(postsActions.setIsLogin({data:'logout'}))
         }
         else {
-            dispatch(postsActions.setIsLogin({data:'login'}))
+            navigate('/login')
         }
     }
     return(
