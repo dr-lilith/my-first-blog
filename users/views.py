@@ -28,7 +28,8 @@ def create_user(request):
     serializer = RegistrationSerializer(data=user)
     serializer.is_valid(raise_exception=True)
     serializer.save()
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
+    login_request = {'email': user["email"], 'password': user["password1"]}
+    return Response(login_request, status=status.HTTP_201_CREATED)
 
 
 @api_view(['POST'])
