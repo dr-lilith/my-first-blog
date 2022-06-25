@@ -1,5 +1,6 @@
 import styles from "./Login.module.css"
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 
 const Login=()=> {
@@ -7,6 +8,8 @@ const Login=()=> {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState('')
     const [isError, setError] = useState(false)
+    const navigate = useNavigate();
+
     
     //todo extract the following function to the API client component
     async function postData(url = '', data = {}) {
@@ -31,7 +34,7 @@ const Login=()=> {
         localStorage.setItem("name", tokens.name)
         localStorage.setItem("token", tokens.token)
         localStorage.setItem("refresh_token", tokens.refresh_token)
-        navigate(`/posts`)
+        navigate(`/`)
         
     }
 
