@@ -6,6 +6,7 @@ import './App.css'
 import { Routes, Route } from "react-router-dom";
 import Registration from "./components/Registration/Registration";
 import SinglePost from "./components/Post/SinglePost/SinglePost";
+import Login from "./components/Login/Login";
 function App() {
   return (
     <div className="App">
@@ -13,6 +14,7 @@ function App() {
       <div style={{paddingTop: '70px'}}>
         <Routes>
           <Route path='/' element={<PostsContainer/>}/>
+          <Route path='/login' element={<Login/>}/>
           <Route path='/posts/:id' element={<SinglePost/>}/>
           <Route path='/user-profile' element={<UserProfile/>}/>
           <Route path='/new-post' element={<NewPost/>}/>

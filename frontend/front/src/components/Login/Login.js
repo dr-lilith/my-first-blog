@@ -31,6 +31,7 @@ const Login=()=> {
         localStorage.setItem("name", tokens.name)
         localStorage.setItem("token", tokens.token)
         localStorage.setItem("refresh_token", tokens.refresh_token)
+        navigate(`/posts`)
         
     }
 
