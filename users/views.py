@@ -58,7 +58,7 @@ def authenticate_user(request):
 
 
 @api_view(['GET'])
-@permission_classes([p.IsAdminUser, ])
+@permission_classes([p.AllowAny, ])
 def get_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
     serializer = UserSerializer(user)

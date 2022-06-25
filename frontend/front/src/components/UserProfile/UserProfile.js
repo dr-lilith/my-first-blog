@@ -28,7 +28,6 @@ const UserProfile=()=> {
         }
       )
   }, [])
-    // return number if number >= 0 else -number
   if (error) {
     return <div>Ошибка: {error.message}</div>;
   } else if (!isLoaded) {
