@@ -45,7 +45,7 @@ const Registration=()=> {
         postData("/users/register", data)
             .then(handleRegistration(data), handleError)
             .then(_ => setIsSaved(false))
-            .then(_ => postData("/users/login",{'email':data.email, 'password':data.password1}))
+            .then(_ => postData("/users/login", {'email':data.email, 'password':data.password1}))
             .then(_ => navigate(`/`));
     }
     return(

@@ -37,8 +37,8 @@ def authenticate_user(request):
     try:
         email = request.data['email']
         password = request.data['password']
-        user = User.objects.get(email=email, password=password)
-        if user:
+        user = User.objects.get(email=email)
+        if user and user.check_password(password):
             tokens = get_tokens_for_user(user)
             user_details = {
                 'name': f"{user.first_name} {user.last_name}",
