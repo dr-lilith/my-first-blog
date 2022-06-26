@@ -1,22 +1,16 @@
+.show {}
 
-.PostEditor{
+.hide {
+  display: none;
+}
+
+.Comment{
     margin-left: 500px;
     display: flex;
     flex-direction: column;
 }
 
-.CreateNewPost {
-  color:rgb(128, 66, 179);
-}
-
-.headlineInput{
-  width: 75%;
-  margin-bottom: 10px;
-  height: 40px;
-  padding-left: 10px;
-}
-
-.postTextarea{
+.commentTextarea{
   width: 75%;
   padding-left: 10px;
   padding-top: 5px;

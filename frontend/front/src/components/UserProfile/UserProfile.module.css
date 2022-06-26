@@ -1,5 +1,7 @@
 .UserProfile{
     display: flex;
+    margin-top: 20px;
+    align-items: center;
 }
 .UserProfile>div:first-child{
     margin-right: 200px;
@@ -21,8 +23,3 @@
   .btn:hover{
     background-color: rgb(194, 194, 194);
   }
-  
-  /* .btn.light {
-    background-color: #4eafc9;
-    border: 2px solid #2a89a2;
-  } */

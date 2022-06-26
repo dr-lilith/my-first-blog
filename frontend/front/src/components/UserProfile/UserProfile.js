@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import AvatarUploader from './AvatarUploader/AvatarUploader';
 import styles from "./UserProfile.module.css"
 
 
@@ -27,7 +28,6 @@ const UserProfile=()=> {
         }
       )
   }, [])
-    // return number if number >= 0 else -number
   if (error) {
     return <div>Ошибка: {error.message}</div>;
   } else if (!isLoaded) {
@@ -36,12 +36,7 @@ const UserProfile=()=> {
     return (
         <div className={styles.UserProfile}>
           <div>
-            <p>
-                <img src={items.avatar} alt='avatar'/>
-            </p>
-            <p>
-                <button className={styles.btn}>Обновить фото</button>
-            </p>
+            <AvatarUploader oldAvatar={items.avatar}/>
           </div>
           <div>
           <h1>

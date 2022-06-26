@@ -1,23 +1,20 @@
 import styles from "./Post.module.css"
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 
 const Post=( { postData })=> {
-    const style = {
-        border: '1px solid #ccc',
-        boxShadow: '0 4px 5px 0 rgba(0, 0, 0, .14)'
-    }
+    const navigate = useNavigate();
     return(
         <div className={styles.Post}>
             <h1>
                 {postData.title}
             </h1>
             <p>
-                {postData.text}
+                {postData.text.slice(0,400)}
             </p>
-            <p>
-                {postData.author_id_id}  
-            </p>
+            <button onClick={() => navigate(`/posts/${postData.id}`)} className={styles.btn}>Открыть пост</button>
+            
         </div> 
     );
 }
