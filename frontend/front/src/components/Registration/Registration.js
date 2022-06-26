@@ -3,14 +3,12 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 
-const Registration=( { postData })=> {
+const Registration=()=> {
     const [isSaved, setIsSaved] = useState(false)
-    const savedHandler = ()=>{
-        setIsSaved(true)
-
     const [email, setEmail] = useState("")
     const [username, setUsername] = useState("")
-    const [password, setPassword] = useState('')
+    const [password1, setPassword1] = useState('')
+    const [password2, setPassword2] = useState('')
     const [isError, setError] = useState(false)
     const navigate = useNavigate();
 
@@ -29,13 +27,10 @@ const Registration=( { postData })=> {
         return await response.json();
       }
 
-    let handleRegistration = (tokens) => {
-        console.log(tokens.name)
-        localStorage.setItem("name", tokens.name)
-        localStorage.setItem("token", tokens.token)
-        localStorage.setItem("refresh_token", tokens.refresh_token)
-        navigate(`/`)
-        
+    function handleRegistration(data) {
+        console.log(data);
+        localStorage.setItem("email", data.email);
+        localStorage.setItem("username", data.username);
     }
 
     let handleError = (error) => {
@@ -46,12 +41,12 @@ const Registration=( { postData })=> {
     const submitHandler = ()=>{
         setError(false);
         setIsSaved(true);
-        let data = { "email": email, "password": password, 'username': username}
+        let data = { "email": email,"password1": password1, "password2": password2, 'username': username}
         postData("/users/register", data)
-            .then(handleRegistration, handleError)
+            .then(handleRegistration(data), handleError)
             .then(_ => setIsSaved(false))
-    }
-
+            .then(_ => postData("/users/login",{'email':data.email, 'password':data.password1}))
+            .then(_ => navigate(`/`));
     }
     return(
         <div className={styles.Registration}>
@@ -61,8 +56,8 @@ const Registration=( { postData })=> {
             </div>
             <input placeholder="Введите email" className={styles.headlineInput} onChange={event => setEmail(event.target.value)}/>
             <input placeholder="Придумайте уникальное имя пользователя" className={styles.headlineInput} onChange={event => setUsername(event.target.value)}/>
-            <input placeholder="Придумайте пароль" className={styles.headlineInput}/>
-            <input placeholder="Повторите пароль" className={styles.headlineInput} onChange={event => setPassword(event.target.value)}/>
+            <input placeholder="Придумайте пароль" className={styles.headlineInput} onChange={event => setPassword1(event.target.value)}/>
+            <input placeholder="Повторите пароль" className={styles.headlineInput} onChange={event => setPassword2(event.target.value)}/>
             <p>
                 <button className={!isSaved ? styles.btn: styles.btnSaved} onClick={submitHandler}>{!isSaved ? 'Coхранить':'Сохранено'}</button>
             </p>
