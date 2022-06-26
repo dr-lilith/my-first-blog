@@ -27,9 +27,10 @@ def comment_detail(request, id):
 @permission_classes([p.IsAuthenticated, ])
 def comment_new(request):
     serializer = CommentSerializer(data=request.data)
-    serializer.initial_data["author_id"] = request.user.id
     serializer.is_valid(raise_exception=True)
-    serializer.save()
+    post_id = request.data.get("post_id")
+    post = get_object_or_404(Post, id=post_id)
+    serializer.save(author=request.user, post=post)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -37,6 +38,8 @@ def comment_new(request):
 @permission_classes([p.IsAuthenticated, ])
 def comment_edit(request, id):
     comment = get_object_or_404(Comment, id=id)
+    if comment.author.id != request.user.id:
+        return Response({}, status=status.HTTP_403_FORBIDDEN)
     serializer = CommentUpdateSerializer(comment, data=request.data)
     serializer.is_valid(raise_exception=True)
     serializer.save()
