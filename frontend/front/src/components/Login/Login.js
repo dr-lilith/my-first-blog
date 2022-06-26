@@ -1,6 +1,8 @@
 import styles from "./Login.module.css"
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
+import { postsActions } from "../../store/store";
+
 
 
 const Login=()=> {
@@ -50,6 +52,7 @@ const Login=()=> {
         postData("/users/login", data)
             .then(handleLogin, handleError)
             .then(_ => setIsSaved(false))
+            .then(_ => postsActions.setIsLogin(true))
     }
     
     return(
