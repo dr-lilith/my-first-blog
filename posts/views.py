@@ -63,9 +63,8 @@ def post_detail(request, id):
 @permission_classes([p.IsAuthenticated, ])
 def post_new(request):
     serializer = PostSerializer(data=request.data)
-    serializer.initial_data["author_id"] = request.user.id
     serializer.is_valid(raise_exception=True)
-    serializer.save()
+    serializer.save(author=request.user)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -140,6 +139,9 @@ def search_tag(request, id):
 @permission_classes([p.IsAuthenticated, ])
 def add_tag(request, id):
     post = get_object_or_404(Post, id=id)
+    if post.author.id != request.user.id:
+        return Response({}, status=status.HTTP_403_FORBIDDEN)
+
     new_tag = Tag.objects.filter(tag=request.data['tag']).first()
     if not new_tag:
         new_tag = Tag()
@@ -171,7 +173,7 @@ def search_by_tag(request):
 
 @api_view(['POST'])
 @permission_classes([p.IsAuthenticated, ])
-def upload_post_photo(request,id):
+def upload_post_photo(request, id):
     serializer = UploadPostPhotoSerializer(request.user, data=request.data, partial=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()
@@ -180,7 +182,7 @@ def upload_post_photo(request,id):
 
 @api_view(['POST'])
 @permission_classes([p.IsAuthenticated, ])
-def upload_post_photo_from_url(request,id):
+def upload_post_photo_from_url(request, id):
     post = get_object_or_404(Post, id=id)
     photo_url = request.data.get('url')
     result = urllib.request.urlretrieve(photo_url)

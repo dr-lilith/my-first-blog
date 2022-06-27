@@ -6,14 +6,9 @@ from.models import *
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    post_id = models.ForeignKey(Post, on_delete=models.CASCADE)
-    text = serializers.CharField(max_length=200)
-    created_date = models.DateTimeField(default=timezone.now)
-    published_date = models.DateTimeField(blank=True, null=True)
-
     class Meta(object):
         model = Comment
-        fields = ('id', 'post_id', 'author_id', 'text', 'created_date', 'published_date', 'is_deleted')
+        fields = ('id', 'post_id', 'author_id', 'text', 'created_date', 'is_deleted')
 
 
 class CommentUpdateSerializer(serializers.ModelSerializer):
