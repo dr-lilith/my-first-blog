@@ -1,6 +1,9 @@
 import styles from "./Registration.module.css"
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { postsActions } from "../../store/store";
+import { useDispatch } from "react-redux";
+
 
 
 const Registration=()=> {
@@ -11,6 +14,8 @@ const Registration=()=> {
     const [password2, setPassword2] = useState('')
     const [isError, setError] = useState(false)
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
 
     async function postData(url = '', data = {}) {
         console.log("try post", data)
@@ -46,6 +51,7 @@ const Registration=()=> {
             .then(handleRegistration(data), handleError)
             .then(_ => setIsSaved(false))
             .then(_ => postData("/users/login", {'email':data.email, 'password':data.password1}))
+            .then(_ => dispatch(postsActions.setIsLogin({data:'login'})))
             .then(_ => navigate(`/`));
     }
     return(
