@@ -3,7 +3,14 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { postsActions } from "../../store/store";
 import { useDispatch } from "react-redux";
+import { postData } from "../utils/backend";
 
+const handleLogin = (tokens) => {
+    console.log(tokens.name)
+    localStorage.setItem("name", tokens.name)
+    localStorage.setItem("token", tokens.token)
+    localStorage.setItem("refresh_token", tokens.refresh_token)
+}
 
 const Login=()=> {
     const [isSaved, setIsSaved] = useState(false)
@@ -15,31 +22,6 @@ const Login=()=> {
     const navigate = useNavigate()
     const dispatch = useDispatch();
 
-    
-    async function postData(url = '', data = {}) {
-        console.log("try post", data)
-        const response = await fetch(url, {
-          method: 'POST',
-          mode: 'same-origin',
-          cache: 'no-cache',
-          credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        }).catch(handleError);
-        return await response.json();
-      }
-    
-    let handleLogin = (tokens) => {
-        console.log(tokens.name)
-        localStorage.setItem("name", tokens.name)
-        localStorage.setItem("token", tokens.token)
-        localStorage.setItem("refresh_token", tokens.refresh_token)
-        navigate(`/`)
-        
-    }
-
     let handleError = (error) => {
         console.log(error)
         setError(true)
@@ -49,8 +31,8 @@ const Login=()=> {
         setError(false);
         setIsSaved(true);
         let data = { "email": email, "password": password }
-        postData("/users/login", data)
-            .then(handleLogin, handleError)
+        postData("/users/login", data, handleError)
+            .then(json => { handleLogin(json); navigate(`/`); } , handleError)
             .then(_ => setIsSaved(false))
             .then(_ => dispatch(postsActions.setIsLogin({data:'login'})))
     }
@@ -87,11 +69,11 @@ const Login=()=> {
             </div>
             <input placeholder="Введите email" className={styles.headlineInput} onChange={event => emailValidator(event)}/>
             {emailError===true && 
-                <p>Email error</p>
+                <p>Email error, it should contain '@'</p>
             } 
             <input placeholder="Введите пароль" className={styles.headlineInput} onChange={event => passwordValidator(event)} onKeyPress={passwordPressed}/>
             {passwordError===true && 
-                <p>Password error</p>
+                <p>Password error, it shouldbe longer</p>
             } 
             <p>
                 <button className={!isSaved ? styles.btn: styles.btnSaved} onClick={submitHandler}>{!isSaved ? 'Войти':'Вход...'}</button>
@@ -101,3 +83,4 @@ const Login=()=> {
 }
 
 export default Login;
+export const saveTokens = handleLogin;

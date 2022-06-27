@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import AvatarUploader from './AvatarUploader/AvatarUploader';
 import styles from "./UserProfile.module.css"
 
 
@@ -10,7 +9,8 @@ const UserProfile=()=> {
   
   useEffect(() => {
     
-    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjYxMTQwOTcwLCJpYXQiOjE2NTUxNDEwMzAsImp0aSI6ImM1MGE4N2VjYTc5YTQ4NGRiNTdmZjk5NjVlODc1ZDkzIiwidXNlcl9pZCI6OH0.L2K3ymjvGTMUzwoAqhJPQvnG70mqsY9GefZloQ2e4zA";
+    const token = localStorage.getItem('token')
+    // const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjYxMTQwOTcwLCJpYXQiOjE2NTUxNDEwMzAsImp0aSI6ImM1MGE4N2VjYTc5YTQ4NGRiNTdmZjk5NjVlODc1ZDkzIiwidXNlcl9pZCI6OH0.L2K3ymjvGTMUzwoAqhJPQvnG70mqsY9GefZloQ2e4zA";
     let headers = new Headers({ 'Authorization': `Bearer ${token}`});
 
     fetch("/users/profile", { "headers": headers, })
@@ -28,6 +28,7 @@ const UserProfile=()=> {
         }
       )
   }, [])
+    // return number if number >= 0 else -number
   if (error) {
     return <div>Ошибка: {error.message}</div>;
   } else if (!isLoaded) {
@@ -36,7 +37,12 @@ const UserProfile=()=> {
     return (
         <div className={styles.UserProfile}>
           <div>
-            <AvatarUploader oldAvatar={items.avatar}/>
+            <p>
+                <img src={items.avatar} alt='avatar'/>
+            </p>
+            <p>
+                <button className={styles.btn}>Обновить фото</button>
+            </p>
           </div>
           <div>
           <h1>

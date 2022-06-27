@@ -1,7 +1,8 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { validateLogin } from "../components/utils/backend";
 
 const initialState = {
-	isLogin: false,
+	isLogin: validateLogin(),
     postItems: [],
 
 };
