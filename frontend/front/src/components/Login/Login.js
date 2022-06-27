@@ -16,25 +16,22 @@ const Login=()=> {
     const dispatch = useDispatch();
 
     
-    //todo extract the following function to the API client component
     async function postData(url = '', data = {}) {
         console.log("try post", data)
-        // Default options are marked with *
         const response = await fetch(url, {
-          method: 'POST', // *GET, POST, PUT, DELETE, etc.
-          mode: 'same-origin', // no-cors, *cors, same-origin
-          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-          credentials: 'same-origin', // include, *same-origin, omit
+          method: 'POST',
+          mode: 'same-origin',
+          cache: 'no-cache',
+          credentials: 'same-origin',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(data) // body data type must match "Content-Type" header
+          body: JSON.stringify(data)
         }).catch(handleError);
-        return await response.json(); // parses JSON response into native JavaScript objects
+        return await response.json();
       }
     
     let handleLogin = (tokens) => {
-        //TODO implement tokens saving for app globally
         console.log(tokens.name)
         localStorage.setItem("name", tokens.name)
         localStorage.setItem("token", tokens.token)
