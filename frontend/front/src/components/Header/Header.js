@@ -12,6 +12,8 @@ const Header=()=> {
     const loginHandler = ()=>{
         if (isLogin){
             dispatch(postsActions.setIsLogin({data:'logout'}))
+            navigate('/login')
+
         }
         else {
             navigate('/login')
