@@ -1,4 +1,3 @@
-// import styles from "./PostsContainer.module.css"
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { postsActions } from '../../store/store';
@@ -18,8 +17,6 @@ const PostsContainer=()=> {
           setIsLoaded(true);
           dispatch(postsActions.setPosts({data: result}))
         },
-        // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
-        // чтобы не перехватывать исключения из ошибок в самих компонентах.
         (error) => {
           setIsLoaded(true);
           setError(error);

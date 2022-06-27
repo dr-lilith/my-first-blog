@@ -1,0 +1,12 @@
+.container img {
+    max-width: 500px;
+    border-radius: 8px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.container>div:first-child{
+    margin-right: 200px;
+    margin-left: 200px;
+    display: block;   
+}

@@ -37,8 +37,8 @@ def authenticate_user(request):
     try:
         email = request.data['email']
         password = request.data['password']
-        user = User.objects.get(email=email, password=password)
-        if user:
+        user = User.objects.get(email=email)
+        if user and user.check_password(password):
             tokens = get_tokens_for_user(user)
             user_details = {
                 'name': f"{user.first_name} {user.last_name}",
@@ -58,7 +58,7 @@ def authenticate_user(request):
 
 
 @api_view(['GET'])
-@permission_classes([p.IsAdminUser, ])
+@permission_classes([p.AllowAny, ])
 def get_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
     serializer = UserSerializer(user)
