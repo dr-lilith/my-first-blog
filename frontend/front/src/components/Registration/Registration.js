@@ -1,6 +1,11 @@
 import styles from "./Registration.module.css"
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { postsActions } from "../../store/store";
+import { useDispatch } from "react-redux";
+import { postData } from "../utils/backend";
+import { saveTokens } from "../Login/Login";
+
 
 
 const Registration=()=> {
@@ -11,26 +16,12 @@ const Registration=()=> {
     const [password2, setPassword2] = useState('')
     const [isError, setError] = useState(false)
     const navigate = useNavigate();
-
-    async function postData(url = '', data = {}) {
-        console.log("try post", data)
-        const response = await fetch(url, {
-          method: 'POST', 
-          mode: 'same-origin', 
-          cache: 'no-cache', 
-          credentials: 'same-origin', 
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        }).catch(handleError);
-        return await response.json();
-      }
+    const dispatch = useDispatch();
 
     function handleRegistration(data) {
         console.log(data);
-        localStorage.setItem("email", data.email);
-        localStorage.setItem("username", data.username);
+        setEmail(data.email);
+        setUsername(data.username);
     }
 
     let handleError = (error) => {
@@ -42,12 +33,16 @@ const Registration=()=> {
         setError(false);
         setIsSaved(true);
         let data = { "email": email,"password1": password1, "password2": password2, 'username': username}
-        postData("/users/register", data)
+        postData("/users/register", data, handleError)
             .then(handleRegistration(data), handleError)
             .then(_ => setIsSaved(false))
-            .then(_ => postData("/users/login", {'email':data.email, 'password':data.password1}))
+            .then(_ => postData("/users/login", {'email':data.email, 'password':data.password1})
+                .then(json => saveTokens(json))
+                )
+            .then(_ => dispatch(postsActions.setIsLogin({data:'login'})))
             .then(_ => navigate(`/`));
     }
+
     return(
         <div className={styles.Registration}>
             <h1 className={styles.RegistrationHeadline}>Регистрация нового пользователя</h1>
