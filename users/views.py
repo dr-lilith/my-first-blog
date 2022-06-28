@@ -1,6 +1,6 @@
 import rest_framework.permissions as p
 import os
-from .serializers import UserSerializer, RegistrationSerializer, UploadAvatarSerializer
+from .serializers import UserSerializer, RegistrationSerializer, UploadAvatarSerializer, ImageSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -9,6 +9,7 @@ from rest_framework_simplejwt.tokens import *
 from django.contrib.auth.signals import user_logged_in
 from django.shortcuts import get_object_or_404
 from django.core.files import File
+from django.db import IntegrityError
 import urllib.request
 
 
@@ -112,3 +113,17 @@ def upload_avatar_from_url(request):
     user.save()
 
     return Response({}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([p.IsAuthenticated, ])
+def upload_image(request):
+    serializer = ImageSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    try:
+        image = serializer.save(user=request.user)
+        return Response({"url": image.image.url}, status=status.HTTP_201_CREATED)
+    except IntegrityError as e:
+        image = get_object_or_404()
+        return Response({"url": image.image.url}, status=status.HTTP_208_ALREADY_REPORTED)
+

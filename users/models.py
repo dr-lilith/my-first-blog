@@ -1,9 +1,14 @@
 from __future__ import unicode_literals
+from django.conf import settings
 from django.db import models, transaction
 from django.utils import timezone
+from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.models import (
     AbstractBaseUser, PermissionsMixin, BaseUserManager
 )
+import os
+import hashlib
+from functools import partial
 
 
 class UserManager(BaseUserManager):
@@ -61,4 +66,33 @@ class User(AbstractBaseUser, PermissionsMixin):
         super(User, self).save(*args, **kwargs)
         return self
 
+
+def hash_file(file, block_size=65536):
+    md5sum = hashlib.md5()
+    for buf in iter(partial(file.read, block_size), b''):
+        md5sum.update(buf)
+    return md5sum.hexdigest()
+
+
+def hash_and_upload(instance, filename):
+    #instance.image.open()
+    name, ext = os.path.splitext(filename)
+    result = 'images/{0}_{1}{2}'.format(instance.user.id, hash_file(instance.image), ext)
+    return result
+
+
+class OverwriteStorage(FileSystemStorage):
+    def get_available_name(self, name, max_length=None):
+        if self.exists(name):
+            os.remove(os.path.join(settings.MEDIA_ROOT, name))
+        return name
+
+
+class Image(models.Model):
+    image = models.ImageField(upload_to=hash_and_upload, blank=False, null=False, storage=OverwriteStorage())
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
+    upload_date = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        unique_together = ('image', 'user')
 

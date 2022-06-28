@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from.models import User
+from.models import User, Image
 from django.utils.timezone import datetime
 
 
@@ -46,3 +46,11 @@ class UploadAvatarSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = User
         fields = ['avatar']
+
+
+class ImageSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=True)
+
+    class Meta(object):
+        model = Image
+        fields = ['image']
