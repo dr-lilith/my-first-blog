@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { postsActions } from "../../store/store";
 import { useDispatch } from "react-redux";
-import { postData } from "../utils/backend";
+import { httpPost } from "../utils/httpClient";
 import { saveTokens } from "../Login/Login";
 
 
@@ -33,10 +33,10 @@ const Registration=()=> {
         setError(false);
         setIsSaved(true);
         let data = { "email": email,"password1": password1, "password2": password2, 'username': username}
-        postData("/users/register", data, handleError)
+        httpPost("/users/register", data, handleError)
             .then(handleRegistration(data), handleError)
             .then(_ => setIsSaved(false))
-            .then(_ => postData("/users/login", {'email':data.email, 'password':data.password1})
+            .then(_ => httpPost("/users/login", {'email':data.email, 'password':data.password1})
                 .then(json => saveTokens(json))
                 )
             .then(_ => dispatch(postsActions.setIsLogin({data:'login'})))
@@ -62,4 +62,5 @@ const Registration=()=> {
 }
 
 export default Registration;
+
 

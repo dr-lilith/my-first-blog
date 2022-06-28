@@ -1,5 +1,5 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
-import { validateLogin } from "../components/utils/backend";
+import { validateLogin } from "../components/utils/httpClient";
 
 const initialState = {
 	isLogin: validateLogin(),
