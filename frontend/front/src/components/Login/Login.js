@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { postsActions } from "../../store/store";
 import { useDispatch } from "react-redux";
-import { postData } from "../utils/backend";
+import { httpPost } from "../utils/httpClient";
 
 const handleLogin = (tokens) => {
     console.log(tokens.name)
@@ -31,29 +31,30 @@ const Login=()=> {
         setError(false);
         setIsSaved(true);
         let data = { "email": email, "password": password }
-        postData("/users/login", data, handleError)
+        httpPost("/users/login", data, handleError)
             .then(json => { handleLogin(json); navigate(`/`); } , handleError)
             .then(_ => setIsSaved(false))
             .then(_ => dispatch(postsActions.setIsLogin({data:'login'})))
     }
     const emailValidator = (event)=>{
-        console.log(event.target.value)
-        setEmail(event.target.value)
+        console.log(event.target.value);
         if (email.length > 8 && email.includes('@') ){
             setEmailError(false)
         } else {
             setEmailError(true)
         }
+        setEmail(event.target.value);
+
     }
 
     const passwordValidator = (event)=>{
         console.log(event.target.value)
-        setPassword(event.target.value)
         if (password.length > 1){
             setPasswordError(false)
         } else {
             setPasswordError(true)
         }
+        setPassword(event.target.value);
     }
     const passwordPressed=e=>{
         if (e.key==='Enter' && !passwordError){

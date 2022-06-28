@@ -1,5 +1,3 @@
-import { func } from "prop-types";
-
 const addAuthHeader = (headers = new Headers()) =>{
     const accessToken = localStorage.getItem("token");
     if (accessToken)
@@ -38,6 +36,7 @@ async function checkToken(){
     return false;   
 }
 
-export const getData = get;
-export const postData = post;
+export const appendAuthHeader = addAuthHeader;
+export const httpGet = get;
+export const httpPost = post;
 export const validateLogin = checkToken;
