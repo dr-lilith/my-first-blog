@@ -7,6 +7,7 @@ import { Routes, Route } from "react-router-dom";
 import Registration from "./components/Registration/Registration";
 import SinglePost from "./components/Post/SinglePost/SinglePost";
 import Login from "./components/Login/Login";
+import Footer from "./components/Footer/Footer";
 function App() {
   return (
     <div className="App">
@@ -21,6 +22,7 @@ function App() {
           <Route path='/registration' element={<Registration/>}/>
         </Routes>
       </div>
+      <Footer/>
     </div>
   );
 }

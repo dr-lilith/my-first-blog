@@ -1,13 +1,13 @@
-const addAuthHeader = (headers = new Headers()) =>{
+const addAuthHeader = (headers = {}) =>{
     const accessToken = localStorage.getItem("token");
     if (accessToken)
-        headers.append({ 'Authorization': `Bearer ${accessToken}`});
+        headers['Authorization'] = `Bearer ${accessToken}`;
 
     return headers;
 }
 
 async function post(url = '', data = {}, errorCallback = ()=>{}) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = { 'Content-Type': 'application/json' };
     headers = addAuthHeader(headers);
     const response = await fetch(url, {
       method: 'POST',
@@ -21,7 +21,7 @@ async function post(url = '', data = {}, errorCallback = ()=>{}) {
   }
 
 async function get(url = '', errorCallback = ()=>{}){
-    const response = fetch(url, { headers: addAuthHeader()})
+    const response = await fetch(url, { headers: addAuthHeader() })
         .catch(errorCallback);
     return await response.json();
 }

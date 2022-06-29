@@ -1,49 +1,26 @@
-.show {}
-
-.hide {
-  display: none;
+.Comment {
+    border: 1px solid #ccc;
+    margin-bottom: 70px;
+    display: block;
+    padding: 100px;
+    box-shadow: 0 7px 8px 0 rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
 }
-
-.Comment{
-    margin-left: 500px;
-    display: flex;
-    flex-direction: column;
+.buttons {
+    margin-right: 30px;
 }
-
-.commentTextarea{
-  width: 75%;
-  padding-left: 10px;
-  padding-top: 5px;
-}
-
 .btn {
-    width: 300px;
+    width: 150px;
     margin-right: 10px;
     padding: 15px;
-    margin-top: 10px;
     cursor: pointer;
     font-size: 1em;
-    color: rgb(123, 47, 126);
+    color: rgb(108, 44, 145);
     outline: none;
     font-weight: 900;
     border-radius: 10px;
-    border: 1px solid rgb(100, 12, 100);
+    border: none;
   }
   .btn:hover{
-    background-color: rgb(194, 194, 194);
+    background-color: rgb(180, 172, 179);
   }
-
-.btnSaved {
-  width: 300px;
-  margin-right: 10px;
-  padding: 15px;
-  margin-top: 10px;
-  cursor: none;
-  font-size: 1em;
-  color: rgb(115, 40, 117);
-  background-color: rgb(172, 166, 166);
-  outline: none;
-  font-weight: 900;
-  border-radius: 10px;
-  border: 1px solid rgb(100, 12, 100);
-}

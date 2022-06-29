@@ -102,6 +102,16 @@ def like(request, id):
     return Response({}, status=status.HTTP_200_OK)
 
 
+@api_view(['GET'])
+@permission_classes([p.IsAuthenticated, ])
+def mylike(request, id):
+    post = get_object_or_404(Post, id=id)
+    user = request.user
+    reaction = Reaction.objects.filter(post=post, user=user).first()
+    result = True if reaction else False
+    return Response({"mylike": result}, status=status.HTTP_200_OK)
+
+
 @api_view(['POST'])
 @permission_classes([p.IsAuthenticated, ])
 def dislike(request, id):

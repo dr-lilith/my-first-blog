@@ -1,20 +1,48 @@
 import styles from "./Comment.module.css"
-import React, { useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 
 
-const Comment=()=> {
-    const [isSaved, setIsSaved] = useState(false)
-    const savedHandler = ()=>{
-        setIsSaved(true)
-    }
+const Comment=( { commentData })=> {
+    const navigate = useNavigate();
+    const [author, setAuthor] = useState({})
+    const [comment, setComment] = useState("")
+
+
+    useEffect(() => {
+    
+        async function getCommentJson(commentId){
+            return await fetch(`/comments/${commentId}`)
+                .then(response => response.json());
+        }
+    
+        async function getUserJson(userId){
+            return await fetch(`/users/${userId}`)
+                .then(response => response.json())
+        }
+    
+        function processCommentJson(json){
+            setComment(json);
+            getUserJson(json.author_id)
+                .then(userJson => setAuthor(userJson));
+        }
+    })
+
     return(
         <div className={styles.Comment}>
-            <textarea rows="20" cols="120" name="textArea" className={styles.commentTextarea} placeholder='Оставьте комментарий'/>
             <p>
-                <button className={!isSaved ? styles.btn: styles.btnSaved} onClick={savedHandler}>{!isSaved ? 'Coхранить комментарий':'Сохранено'}</button>
+                {commentData.text}
             </p>
+            <p>
+                Автор поста: {commentData.author_id}
+            </p>
+            <p>
+                Автор поста: {author.username}
+            </p>
+            <p>
+                {new Date(commentData.created_date).toLocaleDateString()}  
+            </p> 
         </div> 
-
     );
 }
 
