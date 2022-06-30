@@ -51,7 +51,7 @@ def comment_edit(request, id):
 def post_comments(request, id):
     post = get_object_or_404(Post, id=id)
     comments = Comment.objects.filter(is_deleted=False, post_id=post.id).values()
-    return Response(comments, status=status.HTTP_200_OK)
+    return Response({"comments": comments}, status=status.HTTP_200_OK)
 
 
 @api_view(['DELETE'])

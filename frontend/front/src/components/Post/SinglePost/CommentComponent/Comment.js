@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 
 
 const Comment=( { commentData })=> {
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
     const [author, setAuthor] = useState({})
     const [comment, setComment] = useState("")
 
@@ -33,12 +33,9 @@ const Comment=( { commentData })=> {
             <p>
                 {commentData.text}
             </p>
-            <p>
-                Автор поста: {commentData.author_id}
-            </p>
-            <p>
-                Автор поста: {author.username}
-            </p>
+            {/* <p>
+                Автор Комментария: {commentData.author_id}
+            </p> */}
             <p>
                 {new Date(commentData.created_date).toLocaleDateString()}  
             </p> 

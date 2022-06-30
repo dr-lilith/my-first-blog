@@ -21,6 +21,7 @@ async function post(url = '', data = {}, errorCallback = ()=>{}) {
   }
 
 async function get(url = '', errorCallback = ()=>{}){
+    console.log(url);
     const response = await fetch(url, { headers: addAuthHeader() })
         .catch(errorCallback);
     return await response.json();
