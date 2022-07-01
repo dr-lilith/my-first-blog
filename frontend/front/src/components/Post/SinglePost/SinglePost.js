@@ -1,7 +1,11 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import styles from "./SinglePost.module.css"
-import Comment from './CommentComponent/Comment';
+import NewComment from './CommentComponent/NewComment';
+import like from '../../../assets/icons/like.png'
+import dislike from '../../../assets/icons/dislike.png'
+import CommentsContainer from './CommentComponent/CommentsContainer';
+
 
 
 const SinglePost=()=> {
@@ -38,6 +42,7 @@ const SinglePost=()=> {
             .then(_ => setIsLoaded(true))
       }, [])
       
+    console.log(post)
     return(
         <div className={styles.container}>
             {(error) && <div>Ошибка: {error.message}</div>}
@@ -52,19 +57,20 @@ const SinglePost=()=> {
                         {post.text}
                     </p>
                     <img alt = 'postImg' src = {post.post_photo}/>
-                    <h1>
-                        Likes : {post.likes}
-                    </h1>
-                    <h1>
-                        Dislikes : {post.dislikes}  
-                    </h1>
+                    <button disabled={!typeof post.my_like==='null'} className={styles.btn}>
+                        <img src={like} className={styles.img}/> {post.likes}
+                    </button>
+                    <button disabled={!typeof post.my_like==='null'} className={styles.btn}>
+                        <img src={dislike} className={styles.img}/> {post.dislikes}  
+                    </button>
                     <p>
                         Автор поста: {author.username}
                     </p>
                     <p>
                         {new Date(post.created_date).toLocaleDateString()}  
                     </p> 
-                    <Comment/>
+                    <NewComment/>
+                    <CommentsContainer/>
                 </div>
 
             }

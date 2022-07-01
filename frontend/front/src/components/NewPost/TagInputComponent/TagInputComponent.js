@@ -255,7 +255,7 @@ const TagsInputComponent = () => {
 
   return (
     <div className="app">
-      <h1> React Tags Example </h1>
+      <h2> Добавить тэги: </h2>
       <div>
         <ReactTags
           tags={tags}

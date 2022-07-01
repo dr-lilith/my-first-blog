@@ -27,7 +27,7 @@ const ImageUploader =( { postData })=> {
     setSelectedFile(e.target.files[0]);
   };
    return <div className={styles.container}>
-        <label htmlFor="myImage">Загрузите фото</label>
+        <label htmlFor="myImage">Загрузить фото</label>
         <input
           type="file"
           onChange={onSelectFile}

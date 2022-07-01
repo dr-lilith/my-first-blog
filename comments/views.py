@@ -46,6 +46,14 @@ def comment_edit(request, id):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@api_view(['GET'])
+@permission_classes([p.AllowAny, ])
+def post_comments(request, id):
+    post = get_object_or_404(Post, id=id)
+    comments = Comment.objects.filter(is_deleted=False, post_id=post.id).values()
+    return Response({"comments": comments}, status=status.HTTP_200_OK)
+
+
 @api_view(['DELETE'])
 @permission_classes([p.IsAuthenticated, ])
 def comment_delete(request, id):
