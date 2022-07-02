@@ -18,12 +18,13 @@ const Comment=()=> {
         setIsSaved(true);
         let id = window.location.pathname.split('/')[2]
         console.log(id, comment)
-        let data = { "text": comment, 'post_id':id }   // сюда еще пост id
+        let data = { "text": comment, 'post_id':id }
         httpPost("/comments/create", data)
-            //.then(navigate('/user-profile'))
             .then(setSavedPostData)
             .then(console.log(savedPostData))
             // .then(_ => setIsSaved(false))
+            .then(window.location.reload())
+
     }
 
     return(
