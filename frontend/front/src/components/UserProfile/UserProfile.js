@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import MyPostsContainer from './MyPosts/MyPostsContainer';
 import styles from "./UserProfile.module.css"
 
 
@@ -6,7 +7,13 @@ const UserProfile=()=> {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
-  
+  const [isEdited, setIsEdited] = useState(false);
+  const [editedUser, setEditedUser] = useState({
+    avatar: '',
+    first_name: '',
+    last_name: '',
+    description: '',
+  })
   useEffect(() => {
     
     const token = localStorage.getItem('token')
@@ -28,17 +35,56 @@ const UserProfile=()=> {
         }
       )
   }, [])
-    // return number if number >= 0 else -number
+
+  const editHandler=()=>{
+    if (!isEdited) {
+      setIsEdited(true)
+    } else {
+      setIsEdited(false)
+      // отправка данных на бэк
+      console.log(items)
+    }
+  }
+  const firstNameHandler=(e)=>{
+    setItems(prev=>{
+      return {
+        ...prev,
+      first_name:e.target.value
+
+      }
+    })
+  }
+  const lastNameHandler=(e)=>{
+    setItems(prev=>{
+      return {
+        ...prev,
+      last_name:e.target.value
+
+      }
+    })
+  }
+
+  const descriptionHandler=(e)=>{
+    setItems(prev=>{
+      return {
+        ...prev,
+      description:e.target.value
+
+      }
+    })
+  }
+
   if (error) {
     return <div>Ошибка: {error.message}</div>;
   } else if (!isLoaded) {
     return <div>Загрузка...</div>;
   } else {
     return (
+      <div>
         <div className={styles.UserProfile}>
           <div>
             <p>
-                <img src={items.avatar} alt='avatar'/>
+                <img src={items?.avatar} alt='avatar'/>
             </p>
             <p>
                 <button className={styles.btn}>Обновить фото</button>
@@ -46,10 +92,11 @@ const UserProfile=()=> {
           </div>
           <div>
           <h1>
-                {items.first_name}
+                {isEdited? <input value={items.first_name} onChange={(e)=>firstNameHandler(e)} placeholder='Введите имя'/> : items?.first_name}
             </h1>
             <h1>
-                {items.last_name}
+                {isEdited? <input value={items.last_name} onChange={(e)=>lastNameHandler(e)} placeholder='Введите фамилию'/> : items?.last_name}
+
             </h1>
             <h1>
                 {items.username}
@@ -61,13 +108,13 @@ const UserProfile=()=> {
                 {new Date(items.date_joined).toLocaleDateString()}  
             </p>
             <p>
-                {items.description}  
+              {isEdited? <textarea value={items.description} onChange={(e)=>descriptionHandler(e)} placeholder='Введите описание профиля'/> : items?.description}
             </p>
+            <button onClick={()=>editHandler()} className={styles.btn}> {!isEdited ? 'Редактировать профиль': 'Сохранить'}</button>
           </div>
-            {
-    
-}
         </div>
+        <MyPostsContainer/>
+      </div>
     );
   }
 

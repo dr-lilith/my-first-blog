@@ -6,7 +6,11 @@ import React, { useState, useEffect } from 'react';
 const Comment=( { commentData })=> {
     //const navigate = useNavigate();
     const [author, setAuthor] = useState({})
-    const [comment, setComment] = useState("")
+    const [comment, setComment] = useState(commentData)
+    const [isEdited, setIsEdited] = useState(false);
+    const [editedComment, setEditedComment] = useState({
+        text: '',
+    })
 
 
     useEffect(() => {
@@ -28,17 +32,38 @@ const Comment=( { commentData })=> {
         }
     })
 
+    const editHandler=()=>{
+        if (!isEdited) {
+          setIsEdited(true)
+        } else {
+          setIsEdited(false)
+          // отправка данных на бэк
+        }
+      }
+    
+      const textHandler=(e)=>{
+        setComment(prev=>{
+          return {
+            ...prev,
+          text:e.target.value
+
+          }
+        })
+        
+      }
+
     return(
         <div className={styles.Comment}>
             <p>
-                {commentData.text}
+                {isEdited? <textarea value={comment.text} className={styles.editcommentText} onChange={(e)=>textHandler(e)} placeholder='Введите текст комментария'/> : comment?.text}
             </p>
             {/* <p>
                 Автор Комментария: {commentData.author_id}
             </p> */}
             <p>
-                {new Date(commentData.created_date).toLocaleDateString()}  
+                {new Date(comment.created_date).toLocaleDateString()}  
             </p> 
+            <button onClick={()=>editHandler()} className={styles.btn}> {!isEdited ? 'Редактировать комментарий': 'Сохранить'}</button>
         </div> 
     );
 }
