@@ -7,10 +7,20 @@ const addAuthHeader = (headers = {}) =>{
 }
 
 async function post(url = '', data = {}, errorCallback = ()=>{}) {
+    return await send(url, "POST", data, errorCallback)
+}
+
+async function put(url = '', data = {}, errorCallback = ()=>{}) {
+    return await send(url, "PUT", data, errorCallback)
+}
+
+async function send(url = '', verb = "POST", data = {}, errorCallback = ()=>{}) {
+    console.log(url);
+    console.log(verb);
     let headers = { 'Content-Type': 'application/json' };
     headers = addAuthHeader(headers);
     const response = await fetch(url, {
-      method: 'POST',
+      method: verb,
       mode: 'same-origin',
       cache: 'no-cache',
       credentials: 'same-origin',
@@ -40,4 +50,5 @@ async function checkToken(){
 export const appendAuthHeader = addAuthHeader;
 export const httpGet = get;
 export const httpPost = post;
+export const httpPut = put;
 export const validateLogin = checkToken;

@@ -1,6 +1,7 @@
 import styles from "./Comment.module.css"
 import { useNavigate, useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import { httpPut } from "../../../utils/httpClient";
 
 
 const Comment=( { commentData })=> {
@@ -36,8 +37,9 @@ const Comment=( { commentData })=> {
         if (!isEdited) {
           setIsEdited(true)
         } else {
-          setIsEdited(false)
-          // отправка данных на бэк
+          httpPut(`/comments/${comment.id}/edit`, comment)
+            .then(setIsEdited(false)
+            )
         }
       }
     
@@ -63,7 +65,7 @@ const Comment=( { commentData })=> {
             <p>
                 {new Date(comment.created_date).toLocaleDateString()}  
             </p> 
-            <button onClick={()=>editHandler()} className={styles.btn}> {!isEdited ? 'Редактировать комментарий': 'Сохранить'}</button>
+            <button onClick={editHandler} className={styles.btn}> {!isEdited ? 'Редактировать комментарий': 'Сохранить'}</button>
         </div> 
     );
 }
