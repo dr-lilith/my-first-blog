@@ -5,7 +5,6 @@ import { httpPut } from "../../../utils/httpClient";
 
 
 const Comment=( { commentData })=> {
-    //const navigate = useNavigate();
     const [author, setAuthor] = useState({})
     const [comment, setComment] = useState(commentData)
     const [isEdited, setIsEdited] = useState(false);
@@ -59,9 +58,6 @@ const Comment=( { commentData })=> {
             <p>
                 {isEdited? <textarea value={comment.text} className={styles.editcommentText} onChange={(e)=>textHandler(e)} placeholder='Введите текст комментария'/> : comment?.text}
             </p>
-            {/* <p>
-                Автор Комментария: {commentData.author_id}
-            </p> */}
             <p>
                 {new Date(comment.created_date).toLocaleDateString()}  
             </p> 

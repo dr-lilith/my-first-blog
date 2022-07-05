@@ -8,20 +8,9 @@ import { postsActions } from '../../../store/store';
 
 const MyPostsContainer=()=> {
   const dispatch = useDispatch();
-  //const comments = useSelector((state)=>state.postItems)
   const [myposts, setMyPosts] = useState([])
   const [error, setError] = useState(null);
-  //const navigate = useNavigate();
   const [isLoaded, setIsLoaded] = useState(false); 
-//   useEffect(() => {
-//     let id = window.location.pathname.split('/')[2] //todo pass in props
-//     navigate("/")
-//     httpGet(`/comments/post/${id}`)
-//         .then(data => {setComments(data);console.log(data)})
-    // fetch(`comments/post/${id}`)
-    //   .then(res => res.json())
-    // })
-
     useEffect(() => {
         console.log("B4 MyPosts REQ")
         httpGet(`/posts/my-posts`)
