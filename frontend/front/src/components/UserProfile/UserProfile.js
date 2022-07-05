@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MyPostsContainer from './MyPosts/MyPostsContainer';
 import styles from "./UserProfile.module.css"
+import { httpPut } from "../utils/httpClient";
 
 
 const UserProfile=()=> {
@@ -40,9 +41,11 @@ const UserProfile=()=> {
     if (!isEdited) {
       setIsEdited(true)
     } else {
-      setIsEdited(false)
-      // отправка данных на бэк
-      console.log(items)
+      let editedProfile = {'first_name':items.first_name, 'second_name':items.second_name, 'description':items.description}
+      console.log(editedProfile)
+      httpPut(`/users/update`, editedProfile)
+            .then(setIsEdited(false)
+            )
     }
   }
   const firstNameHandler=(e)=>{

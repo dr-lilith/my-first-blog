@@ -5,7 +5,7 @@ import NewComment from './CommentComponent/NewComment';
 import like from '../../../assets/icons/like.png'
 import dislike from '../../../assets/icons/dislike.png'
 import CommentsContainer from './CommentComponent/CommentsContainer';
-
+import { httpPut } from "../../utils/httpClient";
 
 
 const SinglePost=()=> {
@@ -18,6 +18,9 @@ const SinglePost=()=> {
     const [items, setItems] = useState([]);
     const [selectedFile, setSelectedFile] = useState();
     const [preview, setPreview] = useState();
+    const userId = localStorage.getItem('user_id')
+
+    
   useEffect(() => {
 
         
@@ -59,8 +62,9 @@ const editHandler=()=>{
     if (!isEdited) {
       setIsEdited(true)
     } else {
-      setIsEdited(false)
-      // отправка данных на бэк
+      httpPut(`/posts/${post.id}/edit`, post)
+            .then(setIsEdited(false)
+            )
     }
   }
   const titleHandler=(e)=>{
@@ -121,7 +125,7 @@ const editHandler=()=>{
                                         style={{visibility: 'hidden'}}
                                         /></div> : 
                     <img alt = 'postImg' src = {post?.post_photo}/>}
-                    <button onClick={()=>editHandler()} className={styles.btn}> {!isEdited ? 'Редактировать пост': 'Сохранить'}</button>
+                    {+userId === post?.author_id && <button onClick={()=>editHandler()} className={styles.btn}> {!isEdited ? 'Редактировать пост': 'Сохранить'}</button>}
                     <div>
                         <button disabled={!typeof post.my_like==='null'} className={styles.btn}>
                             <img src={like} className={styles.img}/> {post.likes}
