@@ -16,11 +16,10 @@ const SinglePost=()=> {
     const {id} = useParams()
     const [isEdited, setIsEdited] = useState(false);
     const [items, setItems] = useState([]);
-    const [editedPost, setEditedUser] = useState({
-        title: '',
-        text: '',
-  })
+    const [selectedFile, setSelectedFile] = useState();
+    const [preview, setPreview] = useState();
   useEffect(() => {
+
         
     async function getPostJson(postId){
         return await fetch(`/posts/${postId}`)
@@ -46,14 +45,22 @@ const SinglePost=()=> {
             }
         )
         .then(_ => setIsLoaded(true))
-  }, [])
+        if (!selectedFile) {
+            setPreview(undefined);
+            return;
+          }
+      
+          const objectUrl = URL.createObjectURL(selectedFile);
+          setPreview(objectUrl);
+      
+          return () => URL.revokeObjectURL(objectUrl);
+  }, [selectedFile])
 const editHandler=()=>{
     if (!isEdited) {
       setIsEdited(true)
     } else {
       setIsEdited(false)
       // отправка данных на бэк
-      console.log(post)
     }
   }
   const titleHandler=(e)=>{
@@ -76,7 +83,21 @@ const editHandler=()=>{
     })
   }
     
-      
+  const imageHandler = (e) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      setSelectedFile(undefined);
+      return;
+    }
+
+    setSelectedFile(e.target.files[0]);
+    setPost(prev=>{
+        return {
+          ...prev,
+        text:selectedFile
+  
+        }
+      })
+  };
     console.log(post)
     return(
         <div className={styles.container}>
@@ -84,21 +105,31 @@ const editHandler=()=>{
             {(!isLoaded) && <div>Загрузка...</div>} 
             {
                 !error && post &&
-                <div>
+                <div style={{display:'flex', flexDirection:'column'}}>
                     <h1>
                         {isEdited? <input value={post.title} className={styles.editpostHeadline} onChange={(e)=>titleHandler(e)} placeholder='Введите заголовок поста'/> : post?.title}
                     </h1>
                     <p>  
                         {isEdited? <textarea value={post.text} className={styles.editpostText} onChange={(e)=>textHandler(e)} placeholder='Введите текст поста'/> : post?.text}
                     </p>
+                    {isEdited? <div>
+                                    <label htmlFor="postImage">Обновить фото</label>
+                                    <input type="file"
+                                        onChange={(e)=>{imageHandler(e)}}
+                                        id="postImage"
+                                        accept=".jpg, .jpeg, .png"
+                                        style={{visibility: 'hidden'}}
+                                        /></div> : 
+                    <img alt = 'postImg' src = {post?.post_photo}/>}
                     <button onClick={()=>editHandler()} className={styles.btn}> {!isEdited ? 'Редактировать пост': 'Сохранить'}</button>
-                    <img alt = 'postImg' src = {post?.post_photo}/>
-                    <button disabled={!typeof post.my_like==='null'} className={styles.btn}>
-                        <img src={like} className={styles.img}/> {post.likes}
-                    </button>
-                    <button disabled={!typeof post.my_like==='null'} className={styles.btn}>
-                        <img src={dislike} className={styles.img}/> {post.dislikes}  
-                    </button>
+                    <div>
+                        <button disabled={!typeof post.my_like==='null'} className={styles.btn}>
+                            <img src={like} className={styles.img}/> {post.likes}
+                         </button>
+                        <button disabled={!typeof post.my_like==='null'} className={styles.btn}>
+                            <img src={dislike} className={styles.img}/> {post.dislikes}  
+                        </button>
+                    </div>
                     <p>
                         Автор поста: {author.username}
                     </p>

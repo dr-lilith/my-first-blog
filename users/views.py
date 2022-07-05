@@ -41,6 +41,7 @@ def authenticate_user(request):
         if user and user.check_password(password):
             tokens = get_tokens_for_user(user)
             user_details = {
+                'user_id': user.id,
                 'name': user.username,
                 'token': tokens["access"],
                 'refresh_token': tokens["refresh"]

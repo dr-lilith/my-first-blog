@@ -12,7 +12,7 @@ const Comment=( { commentData })=> {
     const [editedComment, setEditedComment] = useState({
         text: '',
     })
-
+    const userId = localStorage.getItem('user_id')
 
     useEffect(() => {
     
@@ -53,7 +53,7 @@ const Comment=( { commentData })=> {
         })
         
       }
-
+      console.log(userId,comment.author_id)
     return(
         <div className={styles.Comment}>
             <p>
@@ -65,7 +65,7 @@ const Comment=( { commentData })=> {
             <p>
                 {new Date(comment.created_date).toLocaleDateString()}  
             </p> 
-            <button onClick={editHandler} className={styles.btn}> {!isEdited ? 'Редактировать комментарий': 'Сохранить'}</button>
+            {+userId === comment?.author_id && <button onClick={editHandler} className={styles.btn}> {!isEdited ? 'Редактировать комментарий': 'Сохранить'}</button>}
         </div> 
     );
 }
