@@ -3,36 +3,43 @@ import { useDispatch, useSelector } from 'react-redux';
 import { postsActions } from '../../store/store';
 import Post from "../Post/Post"
 import styles from './PostsContainer.module.css'
-
+import { httpGet } from '../utils/httpClient';
 
 const PostsContainer=()=> {
   const dispatch = useDispatch();
   const posts = useSelector((state)=>state.postItems);
-  const [allPosts, setAllPosts] = useState([]);
+  //const [allPosts, setAllPosts] = useState([]);
   const [error, setError] = useState(null);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);  
   const [noPosts, setNoPosts] = useState(false);
   const [curPage, setCurPage] = useState(1);
+  const [postsCount, setPostsCount] = useState(0);
+  const [pagesCount, setPagesCount] = useState(1);
+  const pageSize = 10;
 
-  useEffect(() => {
-    fetch(`/posts?page=${curPage}`)
-      .then(res => res.json())
+  const loadPostsPage=(num, size) =>
+  {
+    httpGet(`/posts/pages/${curPage}/size/${pageSize}`)
       .then(
         (result) => {
+          setPostsCount(result.count);
+          setPagesCount(result.pages_count);
+          dispatch(postsActions.setPosts({data: result.posts}))
           setIsLoaded(true);
-          dispatch(postsActions.setPosts({data: result}))
         },
         (error) => {
           setIsLoaded(true);
           setError(error);
         }
       )
-      fetch(`/posts/postlist`)
-      .then(res=>res.json())
-      .then((result)=>setAllPosts(result))
+  }
+
+  useEffect(() => {
+      loadPostsPage(curPage, pageSize)
 
   }, [curPage])
+
   const searchHandler=(e)=>{
     if (e.target.value==='') {
       setFilteredPosts([])
@@ -57,9 +64,11 @@ const PostsContainer=()=> {
     return arr;
   }
   const nextHandler = ()=>{
+    loadPostsPage(curPage+1,pageSize)
     setCurPage(prev=>prev+1)
   }
   const prevHandler = ()=>{
+    loadPostsPage(curPage-1,pageSize)
     setCurPage(prev=>prev-1)
   }
   return(
@@ -68,18 +77,18 @@ const PostsContainer=()=> {
     {(error) && <div>Ошибка: {error.message}</div>}
   {(!isLoaded) && <div>Загрузка...</div>}
   {
-    !error && posts && allPosts &&
+    !error && posts &&
     <div>
       <div className={styles.pagination}>
           <button onClick={prevHandler} disabled={curPage===1}>{'<'}</button>
           {
-            paginationButtonsCreator(allPosts.length).map(item=>{
+            paginationButtonsCreator(postsCount).map(item=>{
               return <button 
               className={item===curPage ? styles.paginationItemSelected :  styles.paginationItem}
                key={item} onClick={()=>setCurPage(item)}>{item}</button>
             })
           }
-          <button disabled={curPage===Math.ceil(allPosts.length/10)} onClick={nextHandler}>{'>'}</button>
+          <button disabled={curPage===Math.ceil(postsCount/pageSize)} onClick={nextHandler}>{'>'}</button>
       </div>
       <ul>
         {filteredPosts.length===0 && !noPosts ? posts.map(item => (
