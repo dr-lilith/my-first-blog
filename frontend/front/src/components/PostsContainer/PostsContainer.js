@@ -8,7 +8,6 @@ import { httpGet } from '../utils/httpClient';
 const PostsContainer=()=> {
   const dispatch = useDispatch();
   const posts = useSelector((state)=>state.postItems);
-  //const [allPosts, setAllPosts] = useState([]);
   const [error, setError] = useState(null);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);  
