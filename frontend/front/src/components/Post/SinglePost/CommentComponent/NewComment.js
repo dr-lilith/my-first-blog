@@ -22,7 +22,6 @@ const Comment=()=> {
         httpPost("/comments/create", data)
             .then(setSavedPostData)
             .then(console.log(savedPostData))
-            // .then(_ => setIsSaved(false))
             .then(window.location.reload())
 
     }

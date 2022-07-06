@@ -26,8 +26,6 @@ const NewPost=( { postData })=> {
         
     }
     console.log(savedPostData)
-    // .then(console.log(savedPostData))
-
     return(
         <div className={styles.PostEditor}>
             <h1 className={styles.CreateNewPost}>Создание нового поста:</h1>

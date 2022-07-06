@@ -6,10 +6,10 @@ import { useDispatch } from "react-redux";
 import { httpPost } from "../utils/httpClient";
 
 const handleLogin = (tokens) => {
-    console.log(tokens.name)
     localStorage.setItem("name", tokens.name)
     localStorage.setItem("token", tokens.token)
     localStorage.setItem("refresh_token", tokens.refresh_token)
+    localStorage.setItem("user_id", tokens.user_id)
 }
 
 const Login=()=> {
@@ -37,7 +37,6 @@ const Login=()=> {
             .then(_ => dispatch(postsActions.setIsLogin({data:'login'})))
     }
     const emailValidator = (event)=>{
-        console.log(event.target.value);
         if (email.length > 8 && email.includes('@') ){
             setEmailError(false)
         } else {
@@ -48,7 +47,6 @@ const Login=()=> {
     }
 
     const passwordValidator = (event)=>{
-        console.log(event.target.value)
         if (password.length > 1){
             setPasswordError(false)
         } else {

@@ -1,26 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Comment from './Comment';
-import { httpGet } from '../../../utils/httpClient';
+import MyPost from './MyPost';
+import { httpGet } from '../../utils/httpClient';
 import { useNavigate } from 'react-router';
-import { postsActions } from '../../../../store/store';
+import { postsActions } from '../../../store/store';
 
 
-const CommentsContainer=()=> {
+const MyPostsContainer=()=> {
   const dispatch = useDispatch();
-  const [comments, setComments] = useState([])
+  const [myposts, setMyPosts] = useState([])
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false); 
     useEffect(() => {
-        let id = window.location.pathname.split('/')[2]
-        console.log("B4 COMMENTS REQ")
-        httpGet(`/comments/post/${id}`)
+        console.log("B4 MyPosts REQ")
+        httpGet(`/posts/my-posts`)
           .then(
             (result) => {
                 
               console.log(result);
+              setMyPosts(result);
               setIsLoaded(true);
-              setComments(result.comments);
             },
             (error) => {
               setIsLoaded(true);
@@ -31,12 +30,17 @@ const CommentsContainer=()=> {
 
 
   return(
+    <>
+      <h1 style={{
+        textAlign: 'center'
+      }}>{myposts.length!==0 ? 'Мои посты:':''}</h1>
       <ul>
-        {comments.map(item => (
+        {myposts.map(item => (
           <li key={item.id}>
-            <Comment commentData = {item}/> 
+            <MyPost mypostData = {item}/> 
           </li>
         ))}
       </ul>
+    </>
 )}
-export default CommentsContainer;
+export default MyPostsContainer;

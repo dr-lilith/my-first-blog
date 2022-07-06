@@ -13,8 +13,16 @@
 .img {
     width: 40px;
 }
+.editpostHeadline {
+    width: 100%;
+    font-size: 25px;
+}
+.editpostText {
+    width: 100%;
+    font-size: 23px;
+    min-height: 200px;
+}
 .btn {
-    width: 100px;
     margin-right: 10px;
     padding: 15px;
     margin-top: 10px;
