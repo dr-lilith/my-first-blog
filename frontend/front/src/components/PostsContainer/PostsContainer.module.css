@@ -2,3 +2,18 @@
     margin: 20px;
     width: 300px;
 }
+.pagination{
+    display: flex;
+}
+.paginationItem{
+padding: 5px;
+margin: 5px;
+background-color: grey;
+}
+
+.paginationItemSelected{
+    padding: 5px;
+margin: 5px;
+    background-color: green;
+}
+
