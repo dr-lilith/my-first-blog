@@ -6,6 +6,7 @@ import like from '../../../assets/icons/like.png'
 import dislike from '../../../assets/icons/dislike.png'
 import CommentsContainer from './CommentComponent/CommentsContainer';
 import { httpPut } from "../../utils/httpClient";
+import { httpPost } from "../../utils/httpClient";
 
 
 const SinglePost=()=> {
@@ -67,6 +68,14 @@ const editHandler=()=>{
             )
     }
   }
+  const likeHandler=()=>{
+    return httpPost(`/posts/${post.id}/like`, post)
+        .then(window.location.reload())}
+
+  const dislikeHandler=()=>{
+      return httpPost(`/posts/${post.id}/dislike`, post)
+        .then(window.location.reload())}
+
   const titleHandler=(e)=>{
     setPost(prev=>{
       return {
@@ -127,10 +136,10 @@ const editHandler=()=>{
                     <img alt = 'postImg' src = {post?.post_photo}/>}
                     {+userId === post?.author_id && <button onClick={()=>editHandler()} className={styles.btn}> {!isEdited ? 'Редактировать пост': 'Сохранить'}</button>}
                     <div>
-                        <button disabled={!typeof post.my_like==='null'} className={styles.btn}>
+                        <button disabled={!typeof post.my_like==='null'} onClick={()=>likeHandler()} className={styles.btn}>
                             <img src={like} className={styles.img}/> {post.likes}
                          </button>
-                        <button disabled={!typeof post.my_like==='null'} className={styles.btn}>
+                        <button disabled={!typeof post.my_like==='null'} onClick={()=>dislikeHandler()} className={styles.btn}>
                             <img src={dislike} className={styles.img}/> {post.dislikes}  
                         </button>
                     </div>
