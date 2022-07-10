@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MyPostsContainer from './MyPosts/MyPostsContainer';
 import styles from "./UserProfile.module.css"
-import { httpPut } from "../utils/httpClient";
+import { httpPut, httpPostForm } from "../utils/httpClient";
 
 
 const UserProfile=()=> {
@@ -9,6 +9,7 @@ const UserProfile=()=> {
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
   const [isEdited, setIsEdited] = useState(false);
+  const [image, setImage] = useState(null);
   const [editedUser, setEditedUser] = useState({
     avatar: '',
     first_name: '',
@@ -77,6 +78,26 @@ const UserProfile=()=> {
     })
   }
 
+  const onFileChange = e => {
+    setImage(e.target.files[0]);
+    console.log(e.target.files[0]);
+
+    if (FileReader && e.target && e.target.files.length) {
+      var fr = new FileReader();
+      fr.onload = function () {
+        document.getElementById('avatar').src = fr.result;
+      }
+      fr.readAsDataURL(e.target.files[0]);
+    }
+  }
+
+  const onFileUpload = () => {
+    const formData = new FormData();
+    formData.append("avatar", image, image.name);
+    console.log(items);
+    httpPostForm("users/upload_avatar", formData);
+  }
+
   if (error) {
     return <div>Ошибка: {error.message}</div>;
   } else if (!isLoaded) {
@@ -87,10 +108,11 @@ const UserProfile=()=> {
         <div className={styles.UserProfile}>
           <div>
             <p>
-                <img src={items?.avatar} alt='avatar'/>
+                <img id={styles["avatar"]} src={items?.avatar} alt='avatar'/>
             </p>
             <p>
-                <button className={styles.btn}>Обновить фото</button>
+              <input type="file" onChange={onFileChange} />
+              <button className={styles.btn} onClick={onFileUpload}>Обновить фото</button>
             </p>
           </div>
           <div>
