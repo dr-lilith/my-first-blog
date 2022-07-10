@@ -29,12 +29,16 @@ const CommentsContainer=()=> {
           )
       }, [])
 
+    const deleteCommentHandler=(id)=>{
+        const filteredComments=comments.filter(comment=>+comment.id!=+id)
+        setComments(filteredComments)
+    }
 
   return(
       <ul>
         {comments.map(item => (
           <li key={item.id}>
-            <Comment commentData = {item}/> 
+            <Comment deleteCommentHandler={deleteCommentHandler} commentData = {item}/> 
           </li>
         ))}
       </ul>
