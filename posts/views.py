@@ -107,8 +107,13 @@ def mylike(request, id):
     post = get_object_or_404(Post, id=id)
     user = request.user
     reaction = Reaction.objects.filter(post=post, user=user).first()
-    result = True if reaction else False
-    return Response({"mylike": result}, status=status.HTTP_200_OK)
+    result = {}
+    if reaction and reaction.vote:
+        result = {"mylike": True}
+    if reaction and not reaction.vote:
+        result = {"mylike": False}
+
+    return Response(result, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
