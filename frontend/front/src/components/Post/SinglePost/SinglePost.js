@@ -5,8 +5,7 @@ import NewComment from './CommentComponent/NewComment';
 import like from '../../../assets/icons/like.png'
 import dislike from '../../../assets/icons/dislike.png'
 import CommentsContainer from './CommentComponent/CommentsContainer';
-import { httpPut } from "../../utils/httpClient";
-import { httpPost } from "../../utils/httpClient";
+import { httpPut, httpGet, httpPost } from "../../utils/httpClient";
 
 
 const SinglePost=()=> {
@@ -20,28 +19,33 @@ const SinglePost=()=> {
     const [selectedFile, setSelectedFile] = useState();
     const [preview, setPreview] = useState();
     const userId = localStorage.getItem('user_id')
+    const [liked, setLiked] = useState(false); 
+    const [disliked, setDisliked] = useState(false);  
 
     
   useEffect(() => {
 
+    function processLike(json){
+        console.log(json);
+        if (json.mylike === undefined){
+            return;
+        }
         
-    async function getPostJson(postId){
-        return await fetch(`/posts/${postId}`)
-            .then(response => response.json());
-    }
-
-    async function getUserJson(userId){
-        return await fetch(`/users/${userId}`)
-            .then(response => response.json())
+        if (json.mylike)
+            setLiked(true);
+        else
+            setDisliked(true);
     }
 
     function processPostJson(json){
         setPost(json);
-        getUserJson(json.author_id)
+        httpGet(`/posts/${id}/mylike`)
+            .then(processLike)
+        httpGet(`/users/${json.author_id}`)
             .then(userJson => setAuthor(userJson));
     }
 
-    getPostJson(id)
+    httpGet(`/posts/${id}`)
         .then(processPostJson,
             err => {
                 setIsLoaded(true);

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { httpPut } from "../../../utils/httpClient";
 
 
-const Comment=( { commentData })=> {
+const Comment=( { commentData, deleteCommentHandler })=> {
     const [author, setAuthor] = useState({})
     const [comment, setComment] = useState(commentData)
     const [isEdited, setIsEdited] = useState(false);
@@ -41,6 +41,12 @@ const Comment=( { commentData })=> {
             )
         }
       }
+
+      const deleteHandler=()=>{
+          httpPut(`/comments/${comment.id}/delete`, comment)
+          deleteCommentHandler(comment.id)
+
+        }
     
       const textHandler=(e)=>{
         setComment(prev=>{
@@ -61,7 +67,9 @@ const Comment=( { commentData })=> {
             <p>
                 {new Date(comment.created_date).toLocaleDateString()}  
             </p> 
-            {+userId === comment?.author_id && <button onClick={editHandler} className={styles.btn}> {!isEdited ? 'Редактировать комментарий': 'Сохранить'}</button>}
+            {+userId === comment?.author_id && <button onClick={editHandler} disabled={comment.text.length===0} className={styles.btn}> {!isEdited ? 'Редактировать комментарий': 'Сохранить'}</button>}
+            {+userId === comment?.author_id && <button onClick={deleteHandler} className={styles.btn}>Удалить комментарий</button>}
+
         </div> 
     );
 }

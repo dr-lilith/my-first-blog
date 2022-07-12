@@ -54,7 +54,7 @@ def post_comments(request, id):
     return Response({"comments": comments}, status=status.HTTP_200_OK)
 
 
-@api_view(['DELETE'])
+@api_view(['PUT'])
 @permission_classes([p.IsAuthenticated, ])
 def comment_delete(request, id):
     comment = get_object_or_404(Comment, id=id)
