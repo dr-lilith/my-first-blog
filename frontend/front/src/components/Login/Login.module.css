@@ -19,6 +19,21 @@
   margin-bottom: 10px;
   height: 40px;
   padding-left: 10px;
+  border: none;
+  
+}
+.passwordInputContainer{
+  width: 75%;
+  border: none;
+  background-color: white;
+  height: 40px;
+  border: 1px solid black;
+}
+.passwordInput{
+  width: 90%;
+  height: 100%;
+  padding: 0;
+  border: none;
 }
 
 .btn {
