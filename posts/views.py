@@ -149,6 +149,16 @@ def search_tag(request, id):
     return Response({tag_list}, status=status.HTTP_200_OK)
 
 
+def save_tag(post, tag, user):
+    new_tag = Tag.objects.filter(tag=tag).first()
+    if not new_tag:
+        new_tag = Tag()
+        new_tag.tag = tag
+        new_tag.author = user
+        new_tag.save()
+    post.tag.add(new_tag)
+
+
 @api_view(['POST'])
 @permission_classes([p.IsAuthenticated, ])
 def add_tag(request, id):
@@ -156,13 +166,20 @@ def add_tag(request, id):
     if post.author.id != request.user.id:
         return Response({}, status=status.HTTP_403_FORBIDDEN)
 
-    new_tag = Tag.objects.filter(tag=request.data['tag']).first()
-    if not new_tag:
-        new_tag = Tag()
-        new_tag.tag = request.data['tag']
-        new_tag.author = request.user
-        new_tag.save()
-    post.tag.add(new_tag)
+    save_tag(post, request.data['tag'], request.user)
+    return Response({}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([p.IsAuthenticated, ])
+def add_tags(request, id):
+    post = get_object_or_404(Post, id=id)
+    if post.author.id != request.user.id:
+        return Response({}, status=status.HTTP_403_FORBIDDEN)
+
+    tags = request.data['tags']
+    for tag in tags:
+        save_tag(post, tag, request.user)
     return Response({}, status=status.HTTP_200_OK)
 
 

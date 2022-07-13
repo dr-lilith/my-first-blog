@@ -15,6 +15,7 @@ urlpatterns = [
     path('<int:id>/cancel_reaction', views.cancel_reaction),
     path('<int:id>/delete', views.post_delete),
     path('<int:id>/add_tag', views.add_tag),
+    path('<int:id>/add_tags', views.add_tags),
     path('<int:id>/search_tag', views.search_tag),
     path('<int:id>/delete_tag', views.delete_tag),
     path('search_by_tag', views.search_by_tag),
