@@ -10,6 +10,24 @@ async function post(url = '', data = {}, errorCallback = ()=>{}) {
     return await send(url, "POST", data, errorCallback)
 }
 
+async function postForm(url = '', data, errorCallback = ()=>{}) {
+    console.log(url);
+    console.log(data);
+    let headers = {};
+    headers = addAuthHeader(headers);
+    const response = await fetch(url, {
+      method: 'POST',
+      mode: 'same-origin',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: headers,
+      body: data
+    })
+    .catch(errorCallback);
+
+    return await response.json();
+  }
+
 async function put(url = '', data = {}, errorCallback = ()=>{}) {
     return await send(url, "PUT", data, errorCallback)
 }
@@ -50,5 +68,6 @@ async function checkToken(){
 export const appendAuthHeader = addAuthHeader;
 export const httpGet = get;
 export const httpPost = post;
+export const httpPostForm = postForm;
 export const httpPut = put;
 export const validateLogin = checkToken;

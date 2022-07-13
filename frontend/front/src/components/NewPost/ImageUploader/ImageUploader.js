@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import styles from './ImageUploader.module.css'
 
-const ImageUploader =( { postData })=> {
-    const [selectedFile, setSelectedFile] = useState();
+const ImageUploader =( { setSelectedFile, selectedFile })=> {
   const [preview, setPreview] = useState();
 
   useEffect(() => {
@@ -26,7 +25,7 @@ const ImageUploader =( { postData })=> {
 
     setSelectedFile(e.target.files[0]);
   };
-   return <div className={styles.container}>
+   return (<div className={styles.container}>
         <label htmlFor="myImage">Загрузить фото</label>
         <input
           type="file"
@@ -36,7 +35,8 @@ const ImageUploader =( { postData })=> {
           style={{visibility: 'hidden'}}
         />
         {selectedFile && <img src={preview} alt='postImg'/>}
-      </div>
+        {/* {<button className={styles.btn} onClick={submitHandler}>{'Coхранить фото поста'}</button>} */}
+      </div>)
 }
 
 export default ImageUploader;

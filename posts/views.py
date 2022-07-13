@@ -205,7 +205,11 @@ def search_by_tag(request):
 @api_view(['POST'])
 @permission_classes([p.IsAuthenticated, ])
 def upload_post_photo(request, id):
-    serializer = UploadPostPhotoSerializer(request.user, data=request.data, partial=True)
+    post = get_object_or_404(Post, id=id)
+    if not post.author.id == request.user.id:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    serializer = UploadPostPhotoSerializer(post, data=request.data, partial=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response({}, status=status.HTTP_200_OK)

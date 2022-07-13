@@ -48,8 +48,8 @@ class PostUpdateSerializer(serializers.ModelSerializer):
 
 
 class UploadPostPhotoSerializer(serializers.ModelSerializer):
-    post_photo = serializers.ImageField(required=True)
+    image = serializers.ImageField(source="post_photo", required=True)
 
     class Meta(object):
         model = Post
-        fields = ['post_photo']
+        fields = ['image']

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import MyPostsContainer from './MyPosts/MyPostsContainer';
 import styles from "./UserProfile.module.css"
 import { httpPut } from "../utils/httpClient";
+import AvatarUploader from './AvatarUploader/AvatarUploader';
 
 
 const UserProfile=()=> {
@@ -85,14 +86,7 @@ const UserProfile=()=> {
     return (
       <div>
         <div className={styles.UserProfile}>
-          <div>
-            <p>
-                <img src={items?.avatar} alt='avatar'/>
-            </p>
-            <p>
-                <button className={styles.btn}>Обновить фото</button>
-            </p>
-          </div>
+          <AvatarUploader oldImage={items?.avatar} url={"/users/upload_avatar"} />
           <div>
           <h1>
                 {isEdited? <input value={items.first_name} onChange={(e)=>firstNameHandler(e)} placeholder='Введите имя'/> : items?.first_name}
