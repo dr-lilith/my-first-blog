@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom'
 import { postsActions } from "../../store/store";
 import { useDispatch } from "react-redux";
 import { httpPost } from "../utils/httpClient";
+import hide from "../../assets/icons/hide.png"
+import show from "../../assets/icons/show.png"
+
 
 const handleLogin = (tokens) => {
     localStorage.setItem("name", tokens.name)
@@ -82,7 +85,7 @@ const typeHandler =()=>{
             } 
             <div className={styles.passwordInputContainer}>
                 <input placeholder="Введите пароль" className={styles.passwordInput} type={type} onChange={event => passwordValidator(event)} onKeyPress={passwordPressed}/>
-                <span onClick={()=>typeHandler()}>Hide</span>
+                <span onClick={()=>typeHandler()}><img src={type==="password" ? show : hide} alt="show/hide"/></span>
             </div>
             {passwordError===true && 
                 <p>Password error, it shouldbe longer</p>
