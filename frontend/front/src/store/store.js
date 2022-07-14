@@ -3,8 +3,7 @@ import { configureStore, createSlice } from "@reduxjs/toolkit";
 const initialState = {
 	isLogin: localStorage.getItem("token") ? true : false,
     postItems: [],
-    tagItems: [],
-    editedPost: undefined
+    tagItems: []
 };
 
 const postsSlice = createSlice({
@@ -24,9 +23,6 @@ const postsSlice = createSlice({
         setPostTags(state, action){
             state.tagItems = [...action.payload.data];
         },
-        setEditedPost(state, action){
-            state.editedPost = action.payload.data;
-        }
 	},
 });
 

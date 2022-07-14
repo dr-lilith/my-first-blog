@@ -2,15 +2,11 @@ import styles from "./NewPost.module.css"
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { httpPost } from "../utils/httpClient";
-import { useDispatch } from 'react-redux';
-import { postsActions } from '../../store/store';
-
 
 const NewPost=()=> {
     const [title, setTitle] = useState("")
     const [text, setText] = useState("")
     const [savedPostData, setSavedPostData] = useState(undefined);
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     const submitHandler = ()=>{
         console.log(title, text)
@@ -20,7 +16,6 @@ const NewPost=()=> {
             httpPost("/posts/create", data)
             .then((data) => {
                 setSavedPostData(data);
-                dispatch(postsActions.setEditedPost({data: data}))
                 navigate(`/posts/${data.id}/edit`);
             });
         }

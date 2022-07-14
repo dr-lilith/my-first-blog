@@ -1,55 +1,53 @@
 import styles from "./PostEditor.module.css"
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import TagInputComponent from '../../NewPost/TagInputComponent/TagInputComponent'
-import { useNavigate } from 'react-router-dom'
-import { httpPost, httpPut } from "../../utils/httpClient";
+import { useNavigate, useParams } from 'react-router-dom'
+import { httpGet, httpPut } from "../../utils/httpClient";
 import ImageUploader from "../../ImageUploader/ImageUploader";
-import { useSelector } from 'react-redux';
 
 
-const PostEditor=({ post })=> {
-    let editedPost = useSelector((state)=>state.editedPost);
-    editedPost = post ? post: editedPost;
-    const [title, setTitle] = useState(editedPost?.title ?? "")
-    const [text, setText] = useState(editedPost?.text ?? "")
-    const [savedPostData, setSavedPostData] = useState(undefined);
+const PostEditor=({ })=> {
+    const [editedPost, setEditedPost] = useState(undefined);
+    const [title, setTitle] = useState(editedPost?.title ?? "");
+    const [text, setText] = useState(editedPost?.text ?? "");
+    const {id} = useParams();
     const [tags, setTags] = React.useState([
         { id: 'Thailand', text: 'Thailand' },
         { id: 'India', text: 'India' },
         { id: 'Vietnam', text: 'Vietnam' },
         { id: 'Turkey', text: 'Turkey' },
       ]);
+    
+    useEffect(() => {
+        if (!editedPost){
+            httpGet(`/posts/${id}`)
+                .then((data) => {
+                    setEditedPost(data);
+                    setTitle(data.title);
+                    setText(data.text);
+                }); 
+        }
+    },[])    
+    
     const navigate = useNavigate()
     const submitHandler = ()=>{
         console.log(title, text)
-        let data = { "title": title, "text": text }
-        if (!savedPostData && !editedPost?.id){
-            httpPost("/posts/create", data)
-            .then((data) => {
-                setSavedPostData(data);
-                navigate(`/posts/${data.id}/edit`);
-            });
-        }
-        if (!savedPostData && editedPost?.id){
-            httpPut(`/posts/${editedPost.id}/edit`, data)
-            .then(setSavedPostData) 
-        }
+        let data = { "title": title, "text": text };
+        httpPut(`/posts/${editedPost.id}/edit`, data)
+            .then(() => navigate(`/posts/${editedPost.id}`));
     }
+
     return(
         <div className={styles.PostEditor}>
             <h1 className={styles.CreatePostEditor}>Редактор поста:</h1>
             <h1>
-                {editedPost?.id 
-                  ?<input value={title} className={styles.editpostHeadline} onChange={event => setTitle(event.target.value)} placeholder='Введите заголовок поста'/>
-                  :<input placeholder="Заголовок поста" className={styles.headlineInput} onChange={event => setTitle(event.target.value)}/>}
+                  <input value={title} className={styles.editpostHeadline} onChange={event => setTitle(event.target.value)} placeholder='Введите заголовок поста'/>
             </h1>
             <p>  
-                {editedPost?.id 
-                  ?<textarea value={text} className={styles.editpostText} onChange={event => setText(event.target.value)} placeholder='Введите текст поста'/>
-                  :<textarea rows="20" cols="120" name="textArea" className={styles.postTextarea} placeholder='Текст поста' onChange={event => setText(event.target.value)}/>}
+                <textarea value={text} className={styles.editpostText} onChange={event => setText(event.target.value)} placeholder='Введите текст поста'/>
             </p>
             <h2 className={styles.CreatePostEditor}>К своему посту Вы также можете:</h2>
-            <ImageUploader oldImage={editedPost?.image ?? undefined} url={`/posts/${savedPostData?.id}/upload_post_photo`}/>
+            <ImageUploader oldImage={editedPost?.image ?? undefined} url={`/posts/${editedPost?.id}/upload_post_photo`}/>
             <TagInputComponent tags={tags} setTags={setTags}/>
             <button className={styles.btn} onClick={submitHandler}>Coхранить изменения</button>
         </div> 
