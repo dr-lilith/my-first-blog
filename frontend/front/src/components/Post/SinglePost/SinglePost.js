@@ -24,7 +24,8 @@ const SinglePost=()=> {
     const [liked, setLiked] = useState(false); 
     const [disliked, setDisliked] = useState(false);  
 
-    
+    const navigate = useNavigate();
+
   useEffect(() => {
 
     function processLike(json){
@@ -66,12 +67,9 @@ const SinglePost=()=> {
           return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile])
 const editHandler=()=>{
+    navigate("edit");
     if (!isEdited) {
       setIsEdited(true)
-    } else {
-      httpPut(`/posts/${post.id}/edit`, post)
-            .then(setIsEdited(false)
-            )
     }
   }
   const likeHandler=()=>{

@@ -10,7 +10,7 @@ const NewPost=({post})=> {
     const [isSaved, setIsSaved] = useState(false)
     const [title, setTitle] = useState(post?.title ?? "")
     const [text, setText] = useState(post?.text ?? "")
-    const [savedPostData, setSavedPostData] = useState(false);
+    const [savedPostData, setSavedPostData] = useState(undefined);
     const [tags, setTags] = React.useState([
         { id: 'Thailand', text: 'Thailand' },
         { id: 'India', text: 'India' },
@@ -24,9 +24,11 @@ const NewPost=({post})=> {
         let data = { "title": title, "text": text }
         if (!savedPostData && !post?.id){
             httpPost("/posts/create", data)
-            .then(setSavedPostData)
-            .then(setIsSaved(true))
-            
+            .then((data) => {
+                setSavedPostData(data);
+                setIsSaved(true);
+                navigate(`/posts/${data.id}/edit`);
+            });
         }
         if (!savedPostData && post?.id){
             httpPut(`/posts/${post.id}/edit`, data)
@@ -34,7 +36,7 @@ const NewPost=({post})=> {
             .then(setIsSaved(true))   
         }
     }
-    console.log(tags);
+    //console.log(tags);
     return(
         <div className={styles.PostEditor}>
             <h1 className={styles.CreateNewPost}>Редактор поста:</h1>
@@ -54,7 +56,7 @@ const NewPost=({post})=> {
                   :<button className={!isSaved ? styles.btn: styles.btnSaved} onClick={submitHandler}>{!isSaved ? 'Coхранить новый пост':'Сохранено'}</button>}
             </p>
             {isSaved && <h2 className={styles.CreateNewPost}>К своему посту Вы также можете:</h2>}
-            {isSaved && <ImageUploader oldImage={undefined} url={`/posts/${savedPostData.id}/upload_post_photo`}/>}
+            {isSaved && <ImageUploader oldImage={post?.image ?? undefined} url={`/posts/${savedPostData?.id}/upload_post_photo`}/>}
             {isSaved && <TagInputComponent tags={tags} setTags={setTags}/>}
             {isSaved && <button className={styles.btn} onClick={submitHandler}>{'Coхранить изменения'}</button>}
 

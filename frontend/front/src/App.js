@@ -15,8 +15,10 @@ function App() {
       <div style={{paddingTop: '70px'}}>
         <Routes>
           <Route path='/' element={<PostsContainer/>}/>
+          <Route path='/posts' element={<PostsContainer/>}/>
           <Route path='/login' element={<Login/>}/>
           <Route path='/posts/:id' element={<SinglePost/>}/>
+          <Route path='/posts/:id/edit' element={<NewPost/>}/>
           <Route path='/user-profile' element={<UserProfile/>}/>
           <Route path='/new-post' element={<NewPost/>}/>
           <Route path='/registration' element={<Registration/>}/>
