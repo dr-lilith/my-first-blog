@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import TagInputComponent from "./TagInputComponent/TagInputComponent"
 import { useNavigate } from 'react-router-dom'
 import { httpPost } from "../utils/httpClient";
-import AvatarUploader from "../UserProfile/AvatarUploader/AvatarUploader"
+import ImageUploader from "../ImageUploader/ImageUploader";
 
 
 const NewPost=({post})=> {
@@ -54,7 +54,7 @@ const NewPost=({post})=> {
                 <button className={!isSaved ? styles.btn: styles.btnSaved} onClick={submitHandler}>{!isSaved ? 'Coхранить новый пост':'Сохранено'}</button>
             </p>
             {isSaved && <h2 className={styles.CreateNewPost}>К своему посту Вы также можете:</h2>}
-            {isSaved && <AvatarUploader oldImage={undefined} url={`/posts/${savedPostData.id}/upload_post_photo`}/>}
+            {isSaved && <ImageUploader oldImage={undefined} url={`/posts/${savedPostData.id}/upload_post_photo`}/>}
             {isSaved && <TagInputComponent tags={tags} setTags={setTags}/>}
             {isSaved && <button className={styles.btn} onClick={submitHandler}>{'Coхранить изменения'}</button>}
 

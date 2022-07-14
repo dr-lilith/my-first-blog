@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import styles from './AvatarUploader.module.css'
-import { httpPostForm } from '../../utils/httpClient'
+import styles from './ImageUploader.module.css'
+import { httpPostForm } from '../utils/httpClient'
 
-const AvatarUploader =({oldImage, url})=> {
+const ImageUploader =({oldImage, url})=> {
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
 
@@ -44,4 +44,4 @@ const AvatarUploader =({oldImage, url})=> {
       </div>
 }
 
-export default AvatarUploader;
+export default ImageUploader;
