@@ -1,7 +1,6 @@
 import styles from "./NewPost.module.css"
 import React, { useState } from 'react'
 import TagInputComponent from "./TagInputComponent/TagInputComponent"
-import ImageUploader from "./ImageUploader/ImageUploader"
 import { useNavigate } from 'react-router-dom'
 import { httpPost } from "../utils/httpClient";
 import AvatarUploader from "../UserProfile/AvatarUploader/AvatarUploader"
@@ -12,7 +11,6 @@ const NewPost=({post})=> {
     const [title, setTitle] = useState("")
     const [text, setText] = useState("")
     const [savedPostData, setSavedPostData] = useState(false);
-    const [selectedFile, setSelectedFile] = useState('');
     const [tags, setTags] = React.useState([
         { id: 'Thailand', text: 'Thailand' },
         { id: 'India', text: 'India' },
@@ -35,16 +33,8 @@ const NewPost=({post})=> {
         if (!savedPostData && post?.id){
             httpPost(`/posts/${post.id}/edit`, data)
             .then(setSavedPostData)
-            .then(setIsSaved(true))
-            
+            .then(setIsSaved(true))   
         }
-        if (selectedFile){
-            console.log(selectedFile, 'selectedFile');
-            httpPost(`/posts/${savedPostData.id}/upload_post_photo_from_url`, selectedFile.name)
-            .then(res=>console.log(res))
-            
-        }
-        
     }
     console.log(tags);
     return(
@@ -74,10 +64,3 @@ const NewPost=({post})=> {
 }
 
 export default NewPost;
-
-                    // <h1>
-                    //     {isEdited? <input value={post.title} className={styles.editpostHeadline} onChange={(e)=>titleHandler(e)} placeholder='Введите заголовок поста'/> : post?.title}
-                    // </h1>
-                    // <p>  
-                    //     {isEdited? <textarea value={post.text} className={styles.editpostText} onChange={(e)=>textHandler(e)} placeholder='Введите текст поста'/> : post?.text}
-                    // </p>
