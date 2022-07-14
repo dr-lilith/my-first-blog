@@ -4,7 +4,7 @@ const initialState = {
 	isLogin: localStorage.getItem("token") ? true : false,
     postItems: [],
     tagItems: [],
-    postImage: undefined
+    editedPost: undefined
 };
 
 const postsSlice = createSlice({
@@ -23,6 +23,9 @@ const postsSlice = createSlice({
         },
         setPostTags(state, action){
             state.tagItems = [...action.payload.data];
+        },
+        setEditedPost(state, action){
+            state.editedPost = action.payload.data;
         }
 	},
 });

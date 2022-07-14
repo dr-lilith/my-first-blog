@@ -69,7 +69,7 @@ const SinglePost=()=> {
 const editHandler=()=>{
     navigate("edit");
     if (!isEdited) {
-      setIsEdited(true)
+      setIsEdited(true);
     }
   }
   const likeHandler=()=>{
