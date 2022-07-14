@@ -6,6 +6,8 @@ import like from '../../../assets/icons/like.png'
 import dislike from '../../../assets/icons/dislike.png'
 import CommentsContainer from './CommentComponent/CommentsContainer';
 import { httpPut, httpGet, httpPost } from "../../utils/httpClient";
+// import { is } from 'immer/dist/internal';
+import NewPost from '../../NewPost/NewPost';
 
 
 const SinglePost=()=> {
@@ -123,6 +125,8 @@ const editHandler=()=>{
             {
                 !error && post &&
                 <div style={{display:'flex', flexDirection:'column'}}>
+                    {isEdited? <NewPost post={post}/> : post?.data}
+
                     <h1>
                         {isEdited? <input value={post.title} className={styles.editpostHeadline} onChange={(e)=>titleHandler(e)} placeholder='Введите заголовок поста'/> : post?.title}
                     </h1>
