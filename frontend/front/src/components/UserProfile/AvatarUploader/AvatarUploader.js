@@ -32,7 +32,7 @@ const AvatarUploader =({oldImage, url})=> {
     httpPostForm(url, data, data.name);
   };
    return <div className={styles.container}>
-        <img src={selectedFile? preview:oldImage} alt='Upload your image' style={selectedFile ? {} : {visibility: 'hidden'}}/>
+        <img src={selectedFile? preview:oldImage} alt='Upload your image' style={!selectedFile && !oldImage ? {visibility: 'hidden'} : {}}/>
         <label htmlFor="myImage">Обновить фото</label>
         <input
           type="file"
