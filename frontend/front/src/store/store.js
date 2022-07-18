@@ -1,10 +1,9 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
-import { validateLogin } from "../components/utils/httpClient";
 
 const initialState = {
 	isLogin: localStorage.getItem("token") ? true : false,
     postItems: [],
-
+    tagItems: []
 };
 
 const postsSlice = createSlice({
@@ -20,12 +19,14 @@ const postsSlice = createSlice({
         },
         setPosts(state, action) {
             state.postItems = [...action.payload.data];
-        }
+        },
+        setPostTags(state, action){
+            state.tagItems = [...action.payload.data];
+        },
 	},
 });
 
 export const postsActions = postsSlice.actions;
-
 export const store = configureStore({
-	reducer: postsSlice.reducer,
+	reducer: postsSlice.reducer
 });

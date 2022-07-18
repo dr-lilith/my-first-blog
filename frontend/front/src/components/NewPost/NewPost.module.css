@@ -53,3 +53,13 @@
   border-radius: 10px;
   border: 1px solid rgb(100, 12, 100);
 }
+
+.editpostHeadline {
+  width: 100%;
+  font-size: 25px;
+}
+.editpostText {
+  width: 100%;
+  font-size: 23px;
+  min-height: 200px;
+}

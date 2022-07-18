@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom'
 import { postsActions } from "../../store/store";
 import { useDispatch } from "react-redux";
 import { httpPost } from "../utils/httpClient";
+import hide from "../../assets/icons/hide.png"
+import show from "../../assets/icons/show.png"
+
 
 const handleLogin = (tokens) => {
     localStorage.setItem("name", tokens.name)
@@ -18,7 +21,10 @@ const Login=()=> {
     const [password, setPassword] = useState('')
     const [emailError, setEmailError] = useState(undefined)
     const [passwordError, setPasswordError] = useState(undefined)
-    const [isError, setError] = useState(false)
+    const [isError, setError] = useState(false);
+    const [type, setType] = useState('password');
+
+
     const navigate = useNavigate()
     const dispatch = useDispatch();
 
@@ -59,7 +65,14 @@ const Login=()=> {
             submitHandler()
         }
     }
-
+const typeHandler =()=>{
+    if(type==='password'){
+        setType('text');
+        return;
+    }else{
+        setType('password')
+    }
+}
     return(
         <div className={styles.Login}>
             <h1 className={styles.LoginHeadline}>Вход</h1>
@@ -70,7 +83,10 @@ const Login=()=> {
             {emailError===true && 
                 <p>Email error, it should contain '@'</p>
             } 
-            <input placeholder="Введите пароль" className={styles.headlineInput} onChange={event => passwordValidator(event)} onKeyPress={passwordPressed}/>
+            <div className={styles.passwordInputContainer}>
+                <input placeholder="Введите пароль" className={styles.passwordInput} type={type} onChange={event => passwordValidator(event)} onKeyPress={passwordPressed}/>
+                <span onClick={()=>typeHandler()}><img src={type==="password" ? show : hide} alt="show/hide"/></span>
+            </div>
             {passwordError===true && 
                 <p>Password error, it shouldbe longer</p>
             } 

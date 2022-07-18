@@ -41,8 +41,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
 
 class UploadAvatarSerializer(serializers.ModelSerializer):
-    avatar = serializers.ImageField(required=True)
+    image = serializers.ImageField(source="avatar", required=True)
 
     class Meta(object):
         model = User
-        fields = ['avatar']
+        fields = ['image']

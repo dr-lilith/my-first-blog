@@ -8,6 +8,7 @@ import Registration from "./components/Registration/Registration";
 import SinglePost from "./components/Post/SinglePost/SinglePost";
 import Login from "./components/Login/Login";
 import Footer from "./components/Footer/Footer";
+import PostEditor from "./components/Post/PostEditor/PostEditor";
 function App() {
   return (
     <div className="App">
@@ -15,8 +16,10 @@ function App() {
       <div style={{paddingTop: '70px'}}>
         <Routes>
           <Route path='/' element={<PostsContainer/>}/>
+          <Route path='/posts' element={<PostsContainer/>}/>
           <Route path='/login' element={<Login/>}/>
-          <Route path='/posts/:id' element={<SinglePost/>}/>
+          <Route exact path='/posts/:id' element={<SinglePost/>}/>
+          <Route path='/posts/:id/edit' element={<PostEditor/>}/>
           <Route path='/user-profile' element={<UserProfile/>}/>
           <Route path='/new-post' element={<NewPost/>}/>
           <Route path='/registration' element={<Registration/>}/>

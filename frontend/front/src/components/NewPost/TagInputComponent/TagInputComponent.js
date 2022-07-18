@@ -224,13 +224,7 @@ const KeyCodes = {
 
 const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
-const TagsInputComponent = () => {
-  const [tags, setTags] = React.useState([
-    { id: 'Thailand', text: 'Thailand' },
-    { id: 'India', text: 'India' },
-    { id: 'Vietnam', text: 'Vietnam' },
-    { id: 'Turkey', text: 'Turkey' },
-  ]);
+const TagsInputComponent = ({setTags, tags}) => {
 
   const handleDelete = (i) => {
     setTags(tags.filter((tag, index) => index !== i));

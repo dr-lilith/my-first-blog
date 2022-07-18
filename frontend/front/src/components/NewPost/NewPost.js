@@ -1,44 +1,38 @@
 import styles from "./NewPost.module.css"
 import React, { useState } from 'react'
-import TagInputComponent from "./TagInputComponent/TagInputComponent"
-import ImageUploader from "./ImageUploader/ImageUploader"
 import { useNavigate } from 'react-router-dom'
 import { httpPost } from "../utils/httpClient";
 
-
-const NewPost=( { postData })=> {
-    const [isSaved, setIsSaved] = useState(false)
+const NewPost=()=> {
     const [title, setTitle] = useState("")
     const [text, setText] = useState("")
-    const [savedPostData, setSavedPostData] = useState(false)
-    const navigate = useNavigate()
-
+    const [savedPostData, setSavedPostData] = useState(undefined);
+    const navigate = useNavigate();
     const submitHandler = ()=>{
         console.log(title, text)
-        setIsSaved(true);
+        
         let data = { "title": title, "text": text }
         if (!savedPostData){
-            console.log('hii')
             httpPost("/posts/create", data)
-            .then(setSavedPostData)
-            .then(setIsSaved(true))
+            .then((data) => {
+                setSavedPostData(data);
+                navigate(`/posts/${data.id}/edit`);
+            });
         }
-        
     }
-    console.log(savedPostData)
+    
     return(
         <div className={styles.PostEditor}>
-            <h1 className={styles.CreateNewPost}>Создание нового поста:</h1>
-            <input placeholder="Заголовок поста" className={styles.headlineInput} onChange={event => setTitle(event.target.value)}/>
-            <textarea rows="20" cols="120" name="textArea" className={styles.postTextarea} placeholder='Текст поста' onChange={event => setText(event.target.value)}/>
-            <p>
-                <button className={!isSaved ? styles.btn: styles.btnSaved} onClick={submitHandler}>{!isSaved ? 'Coхранить новый пост':'Сохранено'}</button>
+            <h1 className={styles.CreateNewPost}>Редактор поста:</h1>
+            <h1>
+                <input placeholder="Заголовок поста" className={styles.headlineInput} onChange={event => setTitle(event.target.value)}/>
+            </h1>
+            <p>  
+                <textarea rows="20" cols="120" name="textArea" className={styles.postTextarea} placeholder='Текст поста' onChange={event => setText(event.target.value)}/>
             </p>
-            {isSaved && <h2 className={styles.CreateNewPost}>К своему посту Вы также можете:</h2>}
-            {isSaved && <ImageUploader/>}
-            {isSaved && <TagInputComponent/>}
-            {isSaved && <button className={styles.btn} onClick={submitHandler}>{'Coхранить изменения'}</button>}
-
+            <p>
+                <button className={styles.btn} onClick={submitHandler}>Coхранить новый пост</button>
+            </p>
         </div> 
 
     );

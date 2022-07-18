@@ -71,7 +71,7 @@ const PostsContainer=()=> {
     setCurPage(prev=>prev-1)
   }
   return(
-    <>
+  <>
     <input placeholder='Поиск поста по названию' className={styles.filterInput} onChange={(e)=>{searchHandler(e)}}/>
     {(error) && <div>Ошибка: {error.message}</div>}
   {(!isLoaded) && <div>Загрузка...</div>}
@@ -90,23 +90,23 @@ const PostsContainer=()=> {
           <button disabled={curPage===Math.ceil(postsCount/pageSize)} onClick={nextHandler}>{'>'}</button>
       </div>
       <ul>
-        {filteredPosts.length===0 && !noPosts ? posts.map(item => (
+        {filteredPosts.length===0 && !noPosts 
+        ? posts.map(item => (
           <li key={item.id}>
             <Post postData = {item}/> 
           </li>
         ))
         : filteredPosts.map(item => (
           <li key={item.id}>
-          <Post postData = {item}/> 
-        </li>
-      ))
-    }
-    </ul>
-      
+            <Post postData = {item}/> 
+          </li>
+        ))
+        }
+      </ul>
     </div>
-      } 
-       {!error && noPosts && <h1>К сожалению, нет совпадений {':('}</h1>}
-      </>
+  } 
+  {!error && noPosts && <h1>К сожалению, нет совпадений {':('}</h1>}
+  </>
 )}
 
 export default PostsContainer;

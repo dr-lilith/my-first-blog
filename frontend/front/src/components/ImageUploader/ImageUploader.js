@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import styles from './ImageUploader.module.css'
+import { httpPostForm } from '../utils/httpClient'
 
-const ImageUploader =( { postData })=> {
-    const [selectedFile, setSelectedFile] = useState();
+const ImageUploader =({oldImage, url})=> {
+  const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
 
   useEffect(() => {
@@ -19,23 +20,27 @@ const ImageUploader =( { postData })=> {
   }, [selectedFile]);
 
   const onSelectFile = (e) => {
+    console.log("onSelectFile!!")
     if (!e.target.files || e.target.files.length === 0) {
       setSelectedFile(undefined);
       return;
     }
 
     setSelectedFile(e.target.files[0]);
+    let data = new FormData();
+    data.append("image", e.target.files[0])
+    httpPostForm(url, data, data.name);
   };
    return <div className={styles.container}>
-        <label htmlFor="myImage">Загрузить фото</label>
+        <img src={selectedFile? preview:oldImage} alt='Upload your image' style={!selectedFile && !oldImage ? {visibility: 'hidden'} : {}}/>
+        <label htmlFor="myImage">Обновить фото</label>
         <input
           type="file"
-          onChange={onSelectFile}
+          onChange={(e) => onSelectFile(e)}
           id="myImage"
           accept=".jpg, .jpeg, .png"
           style={{visibility: 'hidden'}}
         />
-        {selectedFile && <img src={preview} alt='postImg'/>}
       </div>
 }
 
