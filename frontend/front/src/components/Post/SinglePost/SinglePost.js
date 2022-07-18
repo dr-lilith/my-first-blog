@@ -5,9 +5,8 @@ import NewComment from './CommentComponent/NewComment';
 import like from '../../../assets/icons/like.png'
 import dislike from '../../../assets/icons/dislike.png'
 import CommentsContainer from './CommentComponent/CommentsContainer';
-import { httpPut, httpGet, httpPost } from "../../utils/httpClient";
-// import { is } from 'immer/dist/internal';
-import NewPost from '../../NewPost/NewPost';
+import { httpGet, httpPost } from "../../utils/httpClient";
+import PostEditor from '../PostEditor/PostEditor';
 
 
 const SinglePost=()=> {
@@ -17,7 +16,6 @@ const SinglePost=()=> {
     const [author, setAuthor] = useState({})
     const {id} = useParams()
     const [isEdited, setIsEdited] = useState(false);
-    const [items, setItems] = useState([]);
     const [selectedFile, setSelectedFile] = useState();
     const [preview, setPreview] = useState();
     const userId = localStorage.getItem('user_id')
@@ -89,11 +87,12 @@ const editHandler=()=>{
                 !error && post &&
                 <div style={{display:'flex', flexDirection:'column'}}>
                     {isEdited
-                    ? <NewPost post={post}/> 
+                    ? <PostEditor post={post}/> 
                     : <div>
                       <h1>
                           {post?.title}
                       </h1>
+                      <img src={post?.post_photo} alt="Post image"/>
                       <p>  
                           {post?.text}
                       </p>

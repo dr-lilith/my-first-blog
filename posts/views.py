@@ -14,14 +14,17 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 @api_view(['GET'])
 @permission_classes([p.AllowAny, ])
 def paging_posts(request, page_num, page_size):
-    posts = Post.objects.filter(is_deleted=False).order_by('-id').values()
-    paginator = Paginator(posts, page_size)
+    posts = Post.objects.filter(is_deleted=False).order_by('-id').all()
+
+    serializer = PostSerializer(list(posts), many=True)
+    paginator = Paginator(serializer.data, page_size)
     try:
         page_posts = paginator.page(page_num)
     except PageNotAnInteger:
         page_posts = paginator.page(1)
     except EmptyPage:
         return Response({}, status=status.HTTP_200_OK)
+
     return Response({"count": paginator.count, "pages_count": paginator.num_pages, "posts": page_posts.object_list},
                     status=status.HTTP_200_OK)
 
